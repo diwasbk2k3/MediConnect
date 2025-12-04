@@ -42,7 +42,7 @@ class _ViewHospitalsScreenState extends State<ViewHospitalsScreen> {
       location: 'Kumariapti, Lalitpur',
       description:
           'City Care Hospital is a well-established healthcare center located in the heart of Kumariapti, Lalitpur...',
-      imagePath: 'assets/icons/city_care_hospittal.png',
+      imagePath: 'assets/images/city_care_hospital.png',
     ),
     Hospital(
       name: 'Himalaya Hospital',
