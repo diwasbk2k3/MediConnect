@@ -25,30 +25,30 @@ class _ViewHospitalsScreenState extends State<ViewHospitalsScreen> {
   final List<Hospital> hospitals = [
     Hospital(
       name: 'Ship Int. Hospital',
-      location: 'Dhibazo, Kathmandu',
+      location: 'Dhibazar, Kathmandu',
       description:
-          'Ship International Hospital is a well-established healthcare center located in the heart of Dhibazo, Kathmandu...',
+          'Ship International Hospital is a well-established healthcare center located in the heart of Dhibazar, Kathmandu...',
       imagePath: 'assets/images/ship_international_hospital.png',
     ),
     Hospital(
       name: 'Maternity Hospital',
       location: 'Baneshwor, Kathmandu',
       description:
-          'Ship International Hospital is a well-established healthcare center located in the heart of Dhibazo, Kathmandu...',
+          'Maternity Hospital is a well-established healthcare center located in the heart of Baneshwor, Kathmandu...',
       imagePath: 'assets/images/maternity_hospital.png',
     ),
     Hospital(
       name: 'City Care Hospital',
       location: 'Kumariapti, Lalitpur',
       description:
-          'Ship International Hospital is a well-established healthcare center located in the heart of Dhibazo, Kathmandu...',
+          'City Care Hospital is a well-established healthcare center located in the heart of Kumariapti, Lalitpur...',
       imagePath: 'assets/icons/city_care_hospittal.png',
     ),
     Hospital(
       name: 'Himalaya Hospital',
-      location: 'Janagihat, Lalitpur',
+      location: 'Jhamsikhel, Lalitpur',
       description:
-          'Ship International Hospital is a well-established healthcare center located in the heart of Dhibazo, Kathmandu...',
+          'Himalaya Hospital is a well-established healthcare center located in the heart of Jhamsikhel, Lalitpur...',
       imagePath: 'assets/images/himalaya_hospital.png',
     ),
   ];
