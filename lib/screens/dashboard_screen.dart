@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mediconnect/screens/view_hospitals_screen.dart';
+import 'package:mediconnect/widgets/dashboard_card_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -46,7 +47,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             children: [
               // View Hospitals Card
-              _buildDashboardCard(
+              DashboardCard(
                 icon: 'assets/icons/view_hospital.png',
                 title: 'View Hospitals',
                 onTap: () {
@@ -60,21 +61,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: 16),
               // Book Appointments Card
-              _buildDashboardCard(
+              DashboardCard(
                 icon: 'assets/icons/book_appointment.png',
                 title: 'Book Appointments',
                 onTap: () {},
               ),
               const SizedBox(height: 16),
               // View Reports Card
-              _buildDashboardCard(
+              DashboardCard(
                 icon: 'assets/icons/health_report.png',
                 title: 'View Reports',
                 onTap: () {},
               ),
               const SizedBox(height: 16),
               // ChatBot Card
-              _buildDashboardCard(
+              DashboardCard(
                 icon: 'assets/icons/chatbot.png',
                 title: 'ChatBot',
                 onTap: () {},
@@ -108,46 +109,5 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDashboardCard({
-    required String icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade200,
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Image.asset(
-              icon,
-              width: 60,
-              height: 60,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(width: 16),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  
 }

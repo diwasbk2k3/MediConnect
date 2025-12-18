@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mediconnect/screens/bottom_layout_screen.dart';
 import 'package:mediconnect/screens/signup_screen.dart';
-import 'package:mediconnect/screens/dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,7 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Rectangle.png as background with logo and text overlay
             Container(
               width: double.infinity,
               height: 325,
@@ -43,7 +42,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: Stack(
                 children: [
-                  // --- BLUE CURVED BACKGROUND (your rectangle.png) ---
                   Positioned.fill(
                     child: Image.asset(
                       'assets/icons/rectangle.png',
@@ -90,7 +88,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  // --- HEART + HAND (your logo.png) ---
                   Positioned(
                     left: 5,
                     bottom: 30,
@@ -226,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const DashboardScreen(),
+                            builder: (context) => const BottomLayoutScreen(),
                           ),
                         );
                       },
