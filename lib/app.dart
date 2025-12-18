@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mediconnect/screens/splash_screen.dart';
+import 'package:mediconnect/theme/theme_data.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,6 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: getApplicationTheme(),
       home: SplashScreen()
     );
   }
