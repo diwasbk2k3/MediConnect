@@ -15,8 +15,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
   final List<OnboardItem> items = [
     OnboardItem(
       title: 'Find Best Hospitals',
-      subtitle: 'Discover Quality Healthcare', // keep this title at the Find Best Hospital widget with increase font size
-      description: 'Browse and compare hospitals near you with detailed information and ratings.', // and here its font also increase and with bg white
+      subtitle: 'Discover Quality Healthcare', 
+      description: 'Browse and compare hospitals near you with detailed information and ratings.',
       icon: Icons.local_hospital,
     ),
     OnboardItem(

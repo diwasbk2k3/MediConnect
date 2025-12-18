@@ -25,7 +25,7 @@ class _ViewHospitalsScreenState extends State<ViewHospitalsScreen> {
   final List<Hospital> hospitals = [
     Hospital(
       name: 'Ship Int. Hospital',
-      location: 'Dhibazar, Kathmandu',
+      location: 'Dhilibazar, Kathmandu',
       description:
           'Ship International Hospital is a well-established healthcare center located in the heart of Dhibazar, Kathmandu...',
       imagePath: 'assets/images/ship_international_hospital.png',
