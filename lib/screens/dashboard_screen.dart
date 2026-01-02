@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mediconnect/screens/view_hospitals_screen.dart';
-import 'package:mediconnect/widgets/dashboard_card_widget.dart';
+import 'package:mediconnect/core/widgets/dashboard_card_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
