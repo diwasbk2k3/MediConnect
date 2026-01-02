@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/screens/bottom_layout_screen.dart';
-import 'package:mediconnect/screens/signup_screen.dart';
+import 'package:mediconnect/features/dashboard/presentation/pages/bottom_layout_screen.dart';
+import 'package:mediconnect/features/auth/presentation/pages/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

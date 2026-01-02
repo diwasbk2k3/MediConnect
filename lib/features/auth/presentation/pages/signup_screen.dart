@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/screens/dashboard_screen.dart';
+import 'package:mediconnect/features/dashboard/presentation/pages/dashboard_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

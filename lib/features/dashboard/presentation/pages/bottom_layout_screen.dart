@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/screens/bottom_screens/appointment_screen.dart';
-import 'package:mediconnect/screens/bottom_screens/home_screen.dart';
-import 'package:mediconnect/screens/bottom_screens/profile_screen.dart';
+import 'package:mediconnect/features/dashboard/presentation/pages/bottom_screens/appointment_screen.dart';
+import 'package:mediconnect/features/dashboard/presentation/pages/bottom_screens/home_screen.dart';
+import 'package:mediconnect/features/dashboard/presentation/pages/bottom_screens/profile_screen.dart';
 
 int _selectedIndex = 0;
 List<Widget> lstBottomScreen = [

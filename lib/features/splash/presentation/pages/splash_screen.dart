@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mediconnect/screens/onboard_screen.dart';
+import 'package:mediconnect/features/onboarding/presentation/pages/onboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

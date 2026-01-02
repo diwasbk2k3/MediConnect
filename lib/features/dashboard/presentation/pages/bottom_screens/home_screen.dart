@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/screens/view_hospitals_screen.dart';
+import 'package:mediconnect/features/dashboard/presentation/pages/view_hospitals_screen.dart';
 import 'package:mediconnect/core/widgets/dashboard_card_widget.dart';
 
 class HomeScreen extends StatelessWidget {
