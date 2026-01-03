@@ -72,11 +72,11 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<Failure, AuthEntity>> register(AuthEntity entity) async {
     try {
-      // model ma conversion garne
+      // Convert entity to model
       final model = AuthHiveModel.fromEntity(entity);
       final result = await _authDatasource.register(model);
       if (result) {
-        return Right(entity);
+        return Right(entity.copyWith(authId: model.authId));
       } else {
         return Left(LocalDatabaseFailure(message: "Registration failed"));
       }

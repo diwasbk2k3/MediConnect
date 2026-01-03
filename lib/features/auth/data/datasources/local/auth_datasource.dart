@@ -16,15 +16,21 @@ class AuthLocalDatasource implements IAuthDatasource {
     : _hiveService = hiveService;
 
   @override
-  Future<AuthHiveModel?> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+  Future<AuthHiveModel?> getCurrentUser() async {
+    try {
+      return await _hiveService.getCurrentUserFromCache();
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
-  Future<bool> isEmailExists(String email) {
-    // TODO: implement isEmailExists
-    throw UnimplementedError();
+  Future<bool> isEmailExists(String email) async {
+    try {
+      return await _hiveService.isEmailExists(email);
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
@@ -50,10 +56,17 @@ class AuthLocalDatasource implements IAuthDatasource {
   @override
   Future<bool> register(AuthHiveModel model) async {
     try {
+      // Check if email already exists
+      final emailExists = await _hiveService.isEmailExists(model.email);
+      if (emailExists) {
+        throw Exception('Email already registered');
+      }
       await _hiveService.registerUser(model);
+      // Cache the current user
+      await _hiveService.setCurrentUserCache(model);
       return Future.value(true);
     } catch (e) {
-      return Future.value(false);
+      rethrow;
     }
   }
 }

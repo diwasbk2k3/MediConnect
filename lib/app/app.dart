@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/features/splash/presentation/pages/splash_screen.dart';
 import 'package:mediconnect/app/theme/theme_data.dart';
 
@@ -7,10 +8,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: getApplicationTheme(),
-      home: SplashScreen()
+    return ProviderScope(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: getApplicationTheme(),
+        home: const SplashScreen()
+      ),
     );
   }
 }
