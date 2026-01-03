@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/utils/snackbar_utils.dart';
+import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
 import 'package:mediconnect/features/auth/presentation/state/auth_state.dart';
 import 'package:mediconnect/features/auth/presentation/view_model/auth_view_model.dart';
-import 'package:mediconnect/features/dashboard/presentation/pages/dashboard_screen.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -68,7 +68,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         SnackbarUtils.showSuccess(context, 'Registration successful');
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
         );
       }
     });
