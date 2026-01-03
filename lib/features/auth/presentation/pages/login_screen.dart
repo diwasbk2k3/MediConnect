@@ -28,7 +28,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      await ref.read(authViewModelProvider.notifier).login(
+      await ref
+          .read(authViewModelProvider.notifier)
+          .login(
             email: _emailController.text.trim(),
             password: _passwordController.text.trim(),
           );
@@ -42,6 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // Listen for login success/error
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
       if (next.status == AuthStatus.authenticated) {
+        SnackbarUtils.showSuccess(context, 'Login successful');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const BottomLayoutScreen()),
@@ -156,15 +159,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       },
                       decoration: InputDecoration(
                         hintText: 'Enter your email',
-                        hintStyle:
-                            const TextStyle(color: Color(0xFFBDBDBD)),
+                        hintStyle: const TextStyle(color: Color(0xFFBDBDBD)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Color(0xFF4FA3F5)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF4FA3F5),
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Color(0xFF4FA3F5)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF4FA3F5),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -203,15 +209,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       },
                       decoration: InputDecoration(
                         hintText: 'Enter your password',
-                        hintStyle:
-                            const TextStyle(color: Color(0xFFBDBDBD)),
+                        hintStyle: const TextStyle(color: Color(0xFFBDBDBD)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Color(0xFF4FA3F5)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF4FA3F5),
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Color(0xFF4FA3F5)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF4FA3F5),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -246,7 +255,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onPressed: () {
                           // TODO: Forgot password logic
                           SnackbarUtils.showInfo(
-                              context, 'Forgot password feature coming soon');
+                            context,
+                            'Forgot password feature coming soon',
+                          );
                         },
                         child: const Text(
                           'Forgot Password?',
@@ -290,8 +301,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         const Text(
                           "Don't have an account? ",
-                          style:
-                              TextStyle(color: Colors.black87, fontSize: 14),
+                          style: TextStyle(color: Colors.black87, fontSize: 14),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -304,8 +314,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           },
                           child: const Text(
                             'Register now?',
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 14),
+                            style: TextStyle(color: Colors.grey, fontSize: 14),
                           ),
                         ),
                       ],

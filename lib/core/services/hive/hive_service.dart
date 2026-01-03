@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mediconnect/core/constants/hive_table_constant.dart';
 import 'package:mediconnect/features/auth/data/models/auth_hive_model.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io' show Platform;
 
 final hiveServiceProvider = Provider<HiveService>((ref) {
   return HiveService();
