@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/core/services/storage/user_session_service.dart';
+import 'package:mediconnect/features/dashboard/presentation/pages/bottom_layout_screen.dart';
 import 'package:mediconnect/features/onboarding/presentation/pages/onboard_screen.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _scaleController;
@@ -42,7 +45,18 @@ class _SplashScreenState extends State<SplashScreen>
     _scaleController.forward();
 
     Timer(const Duration(seconds: 3), () {
-      if (mounted) {
+      //  Check if user is already logged in
+      final userSessionService = ref.read(userSessionServiceProvider);
+      final isLoggedIn = userSessionService.isLoggedIn();
+
+      if (isLoggedIn) {
+        // Navigate to Home Screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const BottomLayoutScreen()),
+        );
+      } else {
+        // Navigate to Onboarding Screen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const OnboardScreen()),
@@ -104,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen>
                               width: 120,
                               height: 120,
                               fit: BoxFit.contain,
-                            ),                            
+                            ),
                           ],
                         ),
                       ],
