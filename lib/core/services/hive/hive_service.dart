@@ -75,7 +75,14 @@ class HiveService {
   }
 
   // Logout
-  Future<void> logoutUser() async {}
+  Future<void> logoutUser() async {
+    try{
+      final box = Hive.box('_user_cache');
+      await box.delete('currentUserId');
+    }catch(err){
+      debugPrint('Error during logout: $err');
+    }
+  }
 
   // Get Current User by authId
   AuthHiveModel? getCurrentUser(String authId) {

@@ -67,10 +67,15 @@ class AuthLocalDatasource implements IAuthDatasource {
   @override
   Future<bool> logout() async {
     try {
+      // Clear Hive user cache
       await _hiveService.logoutUser();
-      return Future.value(true);
+
+      // Clear SharedPreferences session
+      await _userSessionService.clearUserSession();
+
+      return true;
     } catch (e) {
-      return Future.value(false);
+      return false;
     }
   }
 
