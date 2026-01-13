@@ -51,11 +51,8 @@ class AuthLocalDatasource implements IAuthDatasource {
         await _userSessionService.storeUserSession(
           isLoggedIn: true,
           authId: user.authId!,
-          fullName: user.fullName,
           email: user.email,
           phoneNumber: user.phoneNumber,
-          address: user.address,
-          profilePicture: user.profilePicture,
         );
       }
       return user != null;
