@@ -150,6 +150,7 @@ class _AuthInterceptor extends Interceptor {
     // Skip auth for public endpoints
     final publicEndpoints = [
       ApiEndpoints.userLogin,
+      ApiEndpoints.userSignup
     ];
 
     final isPublicGet =
