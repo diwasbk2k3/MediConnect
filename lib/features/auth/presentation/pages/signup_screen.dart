@@ -4,6 +4,7 @@ import 'package:mediconnect/core/utils/snackbar_utils.dart';
 import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
 import 'package:mediconnect/features/auth/presentation/state/auth_state.dart';
 import 'package:mediconnect/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:flutter/gestures.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -18,6 +19,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _agreedToTerms = false;
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -38,8 +40,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           .read(authViewModelProvider.notifier)
           .register(
             email: _emailController.text.trim(),
-            phoneNumber: '$_selectedCountryCode${_phoneController.text}',
+            phoneNumber: _phoneController.text.trim(),
             password: _passwordController.text.trim(),
+            confirmPassword: _confirmPasswordController.text.trim(),
+            termsAgreed: _agreedToTerms,
           );
     }
   }
@@ -152,7 +156,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               ),
 
               const SizedBox(height: 40),
-              // Signup form
+              // Register form
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
@@ -221,46 +225,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 100,
-                          child: DropdownButtonFormField<String>(
-                            initialValue: _selectedCountryCode,
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 12,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF4FA3F5),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF4FA3F5),
-                                ),
-                              ),
-                            ),
-                            items: ['+977', '+1', '+44', '+91', '+86']
-                                .map(
-                                  (code) => DropdownMenuItem(
-                                    value: code,
-                                    child: Text(code),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() {
-                                  _selectedCountryCode = value;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 12),
                         Expanded(
                           child: TextFormField(
                             controller: _phoneController,
@@ -439,8 +403,93 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         return null;
                       },
                     ),
+                    const SizedBox(height: 12),
+                    FormField<bool>(
+                      initialValue: _agreedToTerms,
+                      validator: (value) {
+                        if (value != true) {
+                          return 'Please agree to our terms and conditions';
+                        }
+                        return null;
+                      },
+                      builder: (formState) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _agreedToTerms,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _agreedToTerms = newValue!;
+                                      formState.didChange(
+                                        newValue,
+                                      ); // updates the FormField
+                                    });
+                                  },
+                                ),
+                                Expanded(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                        height: 1.5,
+                                      ),
+                                      children: [
+                                        const TextSpan(
+                                          text:
+                                              'By creating an account, I agree to our ',
+                                        ),
+                                        TextSpan(
+                                          text: 'Terms of Use',
+                                          style: const TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.blue,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              print('Terms clicked');
+                                            },
+                                        ),
+                                        const TextSpan(text: ' and '),
+                                        TextSpan(
+                                          text: 'Privacy Policy',
+                                          style: const TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.blue,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              print('Privacy clicked');
+                                            },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (formState.hasError)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 12),
+                                child: Text(
+                                  formState.errorText!,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
                     const SizedBox(height: 32),
-                    // Signup Button
+                    // Register Button
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -455,8 +504,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         onPressed: _handleSignup,
                         child: Text(
                           authState.status == AuthStatus.loading
-                              ? 'Signing up...'
-                              : 'Signup',
+                              ? 'Registering...'
+                              : 'Register',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

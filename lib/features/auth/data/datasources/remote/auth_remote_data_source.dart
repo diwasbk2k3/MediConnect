@@ -45,14 +45,16 @@ class AuthRemoteDataSource implements IAuthRemoteDatasource {
   @override
   Future<AuthApiModel> register(AuthApiModel user) async {
     final response = await _apiClient.post(
-      ApiEndpoints.userSignup,
+      ApiEndpoints.userRegister,
       data: user.toJson(),
     );
 
     if (response.data["success"] == true) {
-      final data = response.data["data"] as Map<String, dynamic>;
-      final registeredUser = AuthApiModel.fromJson(data);
-      return registeredUser;
+      final userData = response.data["data"];
+      if (userData != null && userData is Map<String, dynamic>) {
+        return AuthApiModel.fromJson(userData);
+      }
+      return user;
     }
     return user;
   }

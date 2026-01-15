@@ -1,55 +1,61 @@
 import 'package:mediconnect/features/auth/domain/entities/auth_entity.dart';
 
 class AuthApiModel {
-  final String? authId;
   final String email;
   final String? password;
+  final String? confirmPassword;
   final String? phoneNumber;
+  final bool? termsAgreed;
 
   AuthApiModel({
-    this.authId,
     required this.email,
     this.password,
+    this.confirmPassword,
     this.phoneNumber,
+    this.termsAgreed,
   });
 
   // from JSON
   factory AuthApiModel.fromJson(Map<String, dynamic> json) {
     return AuthApiModel(
-      authId: json['authId'] as String?,
       email: json['email'] as String,
       password: json['password'] as String?,
+      confirmPassword: json['confirmPassword'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
+      termsAgreed: json['termsAgreed'] as bool?,
     );
   }
 
   // to JSON
   Map<String, dynamic> toJson() {
     return {
-      'authId': authId,
       'email': email,
       'password': password,
+      'confirmPassword': confirmPassword,
       'phoneNumber': phoneNumber,
+      'termsAgreed': termsAgreed ?? false,
     };
   }
 
   // from Entity
   factory AuthApiModel.fromEntity(AuthEntity entity) {
     return AuthApiModel(
-      authId: entity.authId,
       email: entity.email,
       password: entity.password,
+      confirmPassword: entity.confirmPassword,
       phoneNumber: entity.phoneNumber,
+      termsAgreed: entity.termsAgreed,
     );
   }
 
   // to Entity
   AuthEntity toEntity() {
     return AuthEntity(
-      authId: authId,
       email: email,
       password: password,
+      confirmPassword: confirmPassword,
       phoneNumber: phoneNumber,
+      termsAgreed: termsAgreed,
     );
   }
 

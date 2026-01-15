@@ -10,12 +10,16 @@ import 'package:mediconnect/features/auth/domain/repositories/auth_repository.da
 class RegisterUsecaseParams extends Equatable {
   final String email;
   final String password;
+  final String confirmPassword;
   final String? phoneNumber;
+  final bool ? termsAgreed;
 
   const RegisterUsecaseParams({
     required this.email,
     required this.password,
+    required this.confirmPassword,
     this.phoneNumber,
+    required this.termsAgreed
   });
 
   @override
@@ -23,6 +27,7 @@ class RegisterUsecaseParams extends Equatable {
     email,
     password,
     phoneNumber,
+    termsAgreed
   ];
 }
 
@@ -43,7 +48,9 @@ class RegisterUsecase implements UseCaseWithParams<AuthEntity, RegisterUsecasePa
     final entity = AuthEntity(
       email: params.email,
       password: params.password,
+      confirmPassword: params.confirmPassword,
       phoneNumber: params.phoneNumber,
+      termsAgreed: params.termsAgreed
     );
     return _authRepository.register(entity);
   }
