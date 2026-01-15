@@ -20,9 +20,6 @@ class AuthHiveModel extends HiveObject {
   @HiveField(3)
   String? phoneNumber;
 
-  @HiveField(4)
-  String? profilePicture;
-
   AuthHiveModel({
     String? authId,
     required this.email,
