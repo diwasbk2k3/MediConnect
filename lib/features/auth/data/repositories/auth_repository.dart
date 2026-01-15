@@ -95,7 +95,7 @@ class AuthRepository implements IAuthRepository {
   Future<Either<Failure, AuthEntity>> register(AuthEntity user) async {
     if (await _networkInfo.isConnected) {
       try {
-        // remote ma jaa
+        // Go to remote
         final apiModel = AuthApiModel.fromEntity(user);
         final result = await _authRemoteDataSource.register(apiModel);
         return Right(result.toEntity());
