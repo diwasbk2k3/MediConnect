@@ -1,14 +1,14 @@
 import 'package:mediconnect/features/auth/domain/entities/auth_entity.dart';
 
 class AuthApiModel {
-  final String email;
+  final String? email;
   final String? password;
   final String? confirmPassword;
   final String? phoneNumber;
   final bool? termsAgreed;
 
   AuthApiModel({
-    required this.email,
+    this.email,
     this.password,
     this.confirmPassword,
     this.phoneNumber,
@@ -18,7 +18,7 @@ class AuthApiModel {
   // from JSON
   factory AuthApiModel.fromJson(Map<String, dynamic> json) {
     return AuthApiModel(
-      email: json['email'] as String,
+      email: json['email'] as String?,
       password: json['password'] as String?,
       confirmPassword: json['confirmPassword'] as String?,
       phoneNumber: json['phoneNumber'] as String?,

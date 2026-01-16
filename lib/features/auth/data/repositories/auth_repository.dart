@@ -56,23 +56,43 @@ class AuthRepository implements IAuthRepository {
     String email,
     String password,
   ) async {
-    try {
-      final user = await _authDatasource.login(email, password);
-      if (user) {
-        final userModel = await _authDatasource.getCurrentUser();
-        if (userModel != null) {
-          final userEntity = userModel.toEntity();
-          return Right(userEntity);
-        } else {
-          return Left(
-            LocalDatabaseFailure(message: "Invalid email or password"),
-          );
-        }
-      } else {
-        return Left(LocalDatabaseFailure(message: "Login failed"));
+    if (await _networkInfo.isConnected) {
+      try {
+        final apiModel = await _authRemoteDataSource.login(email, password);
+
+        final entity = apiModel.toEntity();
+        
+        return Right(entity);
+
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data["message"] ?? "Login failed",
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (err) {
+        return Left(ApiFailure(message: err.toString()));
       }
-    } catch (err) {
-      return Left(LocalDatabaseFailure(message: err.toString()));
+    } else {
+      try {
+        final user = await _authDatasource.login(email, password);
+        if (user) {
+          final userModel = await _authDatasource.getCurrentUser();
+          if (userModel != null) {
+            final userEntity = userModel.toEntity();
+            return Right(userEntity);
+          } else {
+            return Left(
+              LocalDatabaseFailure(message: "Invalid email or password"),
+            );
+          }
+        } else {
+          return Left(LocalDatabaseFailure(message: "Login failed"));
+        }
+      } catch (err) {
+        return Left(LocalDatabaseFailure(message: err.toString()));
+      }
     }
   }
 

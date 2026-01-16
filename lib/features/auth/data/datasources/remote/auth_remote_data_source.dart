@@ -31,15 +31,33 @@ class AuthRemoteDataSource implements IAuthRemoteDatasource {
   }
 
   @override
-  Future<AuthApiModel> login(String email, String password) {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<AuthApiModel> login(String email, String password) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.userLogin,
+      data: {"email": email, "password": password},
+    );
+
+    if (response.data["success"] == true) {
+      final authModel = AuthApiModel.fromJson(response.data);
+
+      await _userSessionService.storeUserSession(
+        isLoggedIn: true,
+        email: email,
+      );
+
+      return authModel;
+    }
+
+    throw Exception(response.data["message"] ?? "Login failed");
   }
 
   @override
-  Future<AuthApiModel> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
+  Future<void> logout() async {
+    try {
+      await _userSessionService.clearUserSession();
+    } catch (e) {
+      print("Logout error: $e");
+    }
   }
 
   @override

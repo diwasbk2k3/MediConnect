@@ -12,7 +12,7 @@ class AuthHiveModel extends HiveObject {
   String? authId;
 
   @HiveField(1)
-  String email;
+  String? email;
 
   @HiveField(2)
   String? password;

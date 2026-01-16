@@ -50,9 +50,7 @@ class AuthLocalDatasource implements IAuthLocalDatasource {
       if (user != null) {
         await _userSessionService.storeUserSession(
           isLoggedIn: true,
-          authId: user.authId!,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
+          email: user.email!,
         );
       }
       return user != null;
@@ -80,7 +78,7 @@ class AuthLocalDatasource implements IAuthLocalDatasource {
   Future<bool> register(AuthHiveModel model) async {
     try {
       // Check if email already exists
-      final emailExists = await _hiveService.isEmailExists(model.email);
+      final emailExists = await _hiveService.isEmailExists(model.email!);
       if (emailExists) {
         throw Exception('Email already registered');
       }
