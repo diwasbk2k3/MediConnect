@@ -8,27 +8,26 @@ import 'package:mediconnect/features/auth/domain/entities/auth_entity.dart';
 import 'package:mediconnect/features/auth/domain/repositories/auth_repository.dart';
 
 class RegisterUsecaseParams extends Equatable {
-  final String fullName;
   final String email;
   final String password;
-  final String? address;
+  final String confirmPassword;
   final String? phoneNumber;
+  final bool ? termsAgreed;
 
   const RegisterUsecaseParams({
-    required this.fullName,
     required this.email,
     required this.password,
-    this.address,
+    required this.confirmPassword,
     this.phoneNumber,
+    required this.termsAgreed
   });
 
   @override
   List<Object?> get props => [
-    fullName,
     email,
     password,
-    address,
     phoneNumber,
+    termsAgreed
   ];
 }
 
@@ -47,11 +46,11 @@ class RegisterUsecase implements UseCaseWithParams<AuthEntity, RegisterUsecasePa
   @override
   Future<Either<Failure, AuthEntity>> call(RegisterUsecaseParams params) {
     final entity = AuthEntity(
-      fullName: params.fullName,
       email: params.email,
       password: params.password,
-      address: params.address ?? '',
+      confirmPassword: params.confirmPassword,
       phoneNumber: params.phoneNumber,
+      termsAgreed: params.termsAgreed
     );
     return _authRepository.register(entity);
   }

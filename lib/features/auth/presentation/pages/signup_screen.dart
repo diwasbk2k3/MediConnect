@@ -4,6 +4,7 @@ import 'package:mediconnect/core/utils/snackbar_utils.dart';
 import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
 import 'package:mediconnect/features/auth/presentation/state/auth_state.dart';
 import 'package:mediconnect/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:flutter/gestures.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -14,12 +15,11 @@ class SignupScreen extends ConsumerStatefulWidget {
 
 class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
-  final _addressController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _agreedToTerms = false;
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -27,10 +27,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
-    _addressController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -41,11 +39,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       ref
           .read(authViewModelProvider.notifier)
           .register(
-            fullName: _nameController.text.trim(),
             email: _emailController.text.trim(),
-            phoneNumber: '$_selectedCountryCode${_phoneController.text}',
-            address: _addressController.text.trim(),
+            phoneNumber: _phoneController.text.trim(),
             password: _passwordController.text.trim(),
+            confirmPassword: _confirmPasswordController.text.trim(),
+            termsAgreed: _agreedToTerms,
           );
     }
   }
@@ -158,61 +156,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               ),
 
               const SizedBox(height: 40),
-              // Signup form
+              // Register form
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Name',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
-                      ),
-                    ),
                     const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your name',
-                        hintStyle: const TextStyle(color: Color(0xFFBDBDBD)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF4FA3F5),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF4FA3F5),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF4FA3F5),
-                            width: 2,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
-                        }
-                        if (value.length < 3) {
-                          return 'Name must be at least 3 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
                     const Text(
                       'Email',
                       style: TextStyle(
@@ -275,46 +225,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 100,
-                          child: DropdownButtonFormField<String>(
-                            initialValue: _selectedCountryCode,
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 12,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF4FA3F5),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF4FA3F5),
-                                ),
-                              ),
-                            ),
-                            items: ['+977', '+1', '+44', '+91', '+86']
-                                .map(
-                                  (code) => DropdownMenuItem(
-                                    value: code,
-                                    child: Text(code),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() {
-                                  _selectedCountryCode = value;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 12),
                         Expanded(
                           child: TextFormField(
                             controller: _phoneController,
@@ -365,52 +275,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Address',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _addressController,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your address',
-                        hintStyle: const TextStyle(color: Color(0xFFBDBDBD)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF4FA3F5),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF4FA3F5),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF4FA3F5),
-                            width: 2,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your address';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 20),
                     const Text(
@@ -539,8 +403,93 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         return null;
                       },
                     ),
+                    const SizedBox(height: 12),
+                    FormField<bool>(
+                      initialValue: _agreedToTerms,
+                      validator: (value) {
+                        if (value != true) {
+                          return 'Please agree to our terms and conditions';
+                        }
+                        return null;
+                      },
+                      builder: (formState) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _agreedToTerms,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _agreedToTerms = newValue!;
+                                      formState.didChange(
+                                        newValue,
+                                      ); // updates the FormField
+                                    });
+                                  },
+                                ),
+                                Expanded(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                        height: 1.5,
+                                      ),
+                                      children: [
+                                        const TextSpan(
+                                          text:
+                                              'By creating an account, I agree to our ',
+                                        ),
+                                        TextSpan(
+                                          text: 'Terms of Use',
+                                          style: const TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.blue,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              print('Terms clicked');
+                                            },
+                                        ),
+                                        const TextSpan(text: ' and '),
+                                        TextSpan(
+                                          text: 'Privacy Policy',
+                                          style: const TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.blue,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              print('Privacy clicked');
+                                            },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (formState.hasError)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 12),
+                                child: Text(
+                                  formState.errorText!,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
                     const SizedBox(height: 32),
-                    // Signup Button
+                    // Register Button
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -555,8 +504,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         onPressed: _handleSignup,
                         child: Text(
                           authState.status == AuthStatus.loading
-                              ? 'Signing up...'
-                              : 'Signup',
+                              ? 'Registering...'
+                              : 'Register',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

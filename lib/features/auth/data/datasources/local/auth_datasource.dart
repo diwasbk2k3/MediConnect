@@ -14,7 +14,7 @@ final authLocalDatasourceProvider = Provider<AuthLocalDatasource>((ref) {
   );
 });
 
-class AuthLocalDatasource implements IAuthDatasource {
+class AuthLocalDatasource implements IAuthLocalDatasource {
   final HiveService _hiveService;
   final UserSessionService _userSessionService;
 
@@ -50,12 +50,7 @@ class AuthLocalDatasource implements IAuthDatasource {
       if (user != null) {
         await _userSessionService.storeUserSession(
           isLoggedIn: true,
-          authId: user.authId!,
-          fullName: user.fullName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          address: user.address,
-          profilePicture: user.profilePicture,
+          email: user.email!,
         );
       }
       return user != null;
@@ -83,7 +78,7 @@ class AuthLocalDatasource implements IAuthDatasource {
   Future<bool> register(AuthHiveModel model) async {
     try {
       // Check if email already exists
-      final emailExists = await _hiveService.isEmailExists(model.email);
+      final emailExists = await _hiveService.isEmailExists(model.email!);
       if (emailExists) {
         throw Exception('Email already registered');
       }
