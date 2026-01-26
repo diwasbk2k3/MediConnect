@@ -6,6 +6,7 @@ import 'package:mediconnect/core/utils/snackbar_utils.dart';
 import 'package:mediconnect/features/auth/data/datasources/local/auth_datasource.dart';
 import 'package:mediconnect/features/auth/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
+import 'package:mediconnect/features/profile/presentation/view_model/profile_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ProfileScreenUI extends ConsumerStatefulWidget {
@@ -70,16 +71,18 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
       return;
     }
 
-    final XFile? photo = await _imagePicker.pickImage(
+    final XFile? image = await _imagePicker.pickImage(
       source: ImageSource.camera,
       imageQuality: 80,
     );
 
-    if (photo != null) {
+    if (image != null) {
       setState(() {
         _selectedMedia.clear();
-        _selectedMedia.add(photo);
+        _selectedMedia.add(image);
       });
+      // upload image to server
+      await ref.read(profileViewModelProvider.notifier).updatePatientProfileImage(File(image.path));
     }
   }
 
@@ -102,12 +105,12 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
           imageQuality: 80,
         );
         if (image != null) {
-          setState(() {
             setState(() {
               _selectedMedia.clear();
               _selectedMedia.add(image);
             });
-          });
+            // upload image to server
+            await ref.read(profileViewModelProvider.notifier).updatePatientProfileImage(File(image.path));
         }
       }
     } catch (err) {
