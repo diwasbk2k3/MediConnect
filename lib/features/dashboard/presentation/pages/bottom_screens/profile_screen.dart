@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mediconnect/features/profile/presentation/profile_screen_ui.dart';
+import 'package:mediconnect/features/profile/presentation/pages/profile_screen_ui.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
