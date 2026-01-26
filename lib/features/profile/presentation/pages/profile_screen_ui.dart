@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mediconnect/core/utils/snackbar_utils.dart';
 import 'package:mediconnect/features/auth/data/datasources/local/auth_datasource.dart';
+import 'package:mediconnect/features/auth/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -349,13 +350,28 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
     );
 
     if (confirm == true) {
+      // Read both datasources
+      final authRemoteDatasource = ref.read(authRemoteDatasoureProvider);
       final authLocalDatasource = ref.read(authLocalDatasourceProvider);
-      final success = await authLocalDatasource.logout();
-      if (success && context.mounted) {
-        Navigator.pushReplacement(
+
+      try {
+        // Call remote logout
+        await authRemoteDatasource.logout();
+
+        // Call local logout
+        await authLocalDatasource.logout();
+
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        }
+      } catch (e) {
+        // Optional: show error message if either fails
+        ScaffoldMessenger.of(
           context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-        );
+        ).showSnackBar(SnackBar(content: Text("Logout failed: $e")));
       }
     }
   }

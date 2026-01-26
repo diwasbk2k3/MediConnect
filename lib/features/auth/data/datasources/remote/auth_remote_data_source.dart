@@ -1,28 +1,32 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/api/api_client.dart';
 import 'package:mediconnect/core/api/api_endpoints.dart';
+import 'package:mediconnect/core/services/storage/token_service.dart';
 import 'package:mediconnect/core/services/storage/user_session_service.dart';
 import 'package:mediconnect/features/auth/data/datasources/auth_datasource.dart';
 import 'package:mediconnect/features/auth/data/models/auth_api_model.dart';
 
 // Provider
 final authRemoteDatasoureProvider = Provider<IAuthRemoteDatasource>((ref) {
-  ;
   return AuthRemoteDataSource(
     apiClient: ref.read(apiClientProvider),
     userSessionService: ref.read(userSessionServiceProvider),
+    tokenService: ref.read(tokenServiceProvider),
   );
 });
 
 class AuthRemoteDataSource implements IAuthRemoteDatasource {
   final ApiClient _apiClient;
   final UserSessionService _userSessionService;
+  final TokenService _tokenService;
 
   AuthRemoteDataSource({
     required ApiClient apiClient,
     required UserSessionService userSessionService,
+    required TokenService tokenService,
   }) : _apiClient = apiClient,
-       _userSessionService = userSessionService;
+       _userSessionService = userSessionService,
+       _tokenService = tokenService;
 
   @override
   Future<AuthApiModel?> getCurrentUser() {
@@ -40,10 +44,15 @@ class AuthRemoteDataSource implements IAuthRemoteDatasource {
     if (response.data["success"] == true) {
       final authModel = AuthApiModel.fromJson(response.data);
 
+      // Save to session
       await _userSessionService.storeUserSession(
         isLoggedIn: true,
         email: email,
       );
+
+      // Save token
+      final token = response.data['token'] as String?;
+      await _tokenService.saveToken(token!);
 
       return authModel;
     }
@@ -55,8 +64,8 @@ class AuthRemoteDataSource implements IAuthRemoteDatasource {
   Future<void> logout() async {
     try {
       await _userSessionService.clearUserSession();
-    } catch (e) {
-      print("Logout error: $e");
+      await _tokenService.removeToken();
+    } catch (_) {
     }
   }
 
