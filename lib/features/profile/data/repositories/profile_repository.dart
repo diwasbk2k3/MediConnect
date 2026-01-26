@@ -36,14 +36,14 @@ class RemoteProfileRepository implements IProfileRemoteRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updatePatientProfileImage(File image) async {
+  Future<Either<Failure, String>> updatePatientProfileImage(File image) async {
     if (await _networkInfo.isConnected) {
       try {
         final fileName = await _profileRemoteDatasource
             .updatePatientProfileImage(image);
-        return right(fileName);
+        return Right(fileName);
       } catch (e) {
-        return left(ApiFailure(message: e.toString()));
+        return Left(ApiFailure(message: e.toString()));
       }
     } else {
       return Left(ApiFailure(message: "No Internet Connection"));

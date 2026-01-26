@@ -35,7 +35,7 @@ class ProfileRemoteDatasource implements IProfileRemoteDatasource {
   }
 
   @override
-  Future<void> updatePatientProfileImage(File image) {
+  Future<String> updatePatientProfileImage(File image) async {
     final fileName = image.path.split('/').last;
     final formData = FormData.fromMap({
       "itemPhoto": MultipartFile.fromFile(image.path, filename: fileName),
@@ -44,18 +44,12 @@ class ProfileRemoteDatasource implements IProfileRemoteDatasource {
     // Get token from the token service
     final token = _tokenService.getToken();
 
-    final response = _apiClient.uploadFile(
+    final response = await _apiClient.uploadFile(
       ApiEndpoints.updatePatientImage,
       formData: formData,
       options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
 
-    return response.then((res) {
-      if (res.statusCode == 200) {
-        return;
-      } else {
-        throw Exception('Failed to upload profile image');
-      }
-    });
+    return response.data["success"];
   }
 }

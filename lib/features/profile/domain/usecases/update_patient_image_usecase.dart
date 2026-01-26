@@ -8,19 +8,19 @@ import 'package:mediconnect/features/profile/data/repositories/profile_repositor
 import 'package:mediconnect/features/profile/domain/repositories/profile_repository.dart';
 
 // Provider
-final updatePatientProfileImage = Provider<UpdatePatientImageUsecase>((ref){
+final updatePatientProfileImageUsecaseProvider = Provider<UpdatePatientImageUsecase>((ref){
   final repository = ref.read(remoteProfileRepositoryProvider);
   return UpdatePatientImageUsecase(repository: repository);
 });
 
-class UpdatePatientImageUsecase implements UseCaseWithParams<void, File> {
+class UpdatePatientImageUsecase implements UseCaseWithParams<String, File> {
   final IProfileRemoteRepository _repository;
 
   UpdatePatientImageUsecase({required IProfileRemoteRepository repository})
       : _repository = repository;
 
   @override
-  Future<Either<Failure, void>> call(File params) {
+  Future<Either<Failure, String>> call(File params) {
     return _repository.updatePatientProfileImage(params);
   }
 }
