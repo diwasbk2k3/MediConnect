@@ -23,7 +23,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  String _selectedCountryCode = '+977';
+  // String _selectedCountryCode = '+977';
 
   @override
   void dispose() {
@@ -451,7 +451,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                           ),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
-                                              print('Terms clicked');
                                             },
                                         ),
                                         const TextSpan(text: ' and '),
@@ -464,7 +463,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                           ),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
-                                              print('Privacy clicked');
                                             },
                                         ),
                                       ],
