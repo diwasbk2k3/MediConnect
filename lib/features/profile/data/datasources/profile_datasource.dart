@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:mediconnect/features/profile/data/models/profile_api_model.dart';
+
 abstract interface class IProfileRemoteDatasource {
   Future<Map<String, dynamic>> fetchPatientProfileData();
-  Future<void> createPatientProfile(Map<String, dynamic> profileData);
+  Future<ProfileApiModel> createPatientProfile(ProfileApiModel model);
   Future<void> updatePatientProfileImage(File image);
 }
