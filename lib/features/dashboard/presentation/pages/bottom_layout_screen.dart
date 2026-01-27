@@ -28,8 +28,8 @@ class _BottomLayoutScreenState extends State<BottomLayoutScreen> {
           children: [
             Image.asset(
               'assets/icons/logo.png',
-              width: 35,
-              height: 35,
+              width: 42,
+              height: 42,
               fit: BoxFit.contain,
             ),
             const SizedBox(width: 8),
@@ -37,7 +37,7 @@ class _BottomLayoutScreenState extends State<BottomLayoutScreen> {
               'MediConnect',
               style: TextStyle(
                 color: Color(0xFF4FA3F5),
-                fontSize: 18,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
               ),

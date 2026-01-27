@@ -11,11 +11,26 @@ class _InfoItem {
   _InfoItem(this.icon, this.label, this.value, {this.isLongText = false});
 }
 
-class AboutPatientInfoScreen extends ConsumerWidget {
+class AboutPatientInfoScreen extends ConsumerStatefulWidget {
   const AboutPatientInfoScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AboutPatientInfoScreen> createState() =>
+      _AboutPatientInfoScreenState();
+}
+
+class _AboutPatientInfoScreenState extends ConsumerState<AboutPatientInfoScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch patient profile data when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(profileViewModelProvider.notifier).fetchPatientProfileData();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final profileState = ref.watch(profileViewModelProvider);
 
     return Scaffold(

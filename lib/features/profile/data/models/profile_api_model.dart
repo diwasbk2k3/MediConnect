@@ -3,7 +3,7 @@ import 'package:mediconnect/features/profile/domain/entities/profile_entity.dart
 
 part 'profile_api_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class ProfileApiModel {
   final String? name;
   final String? address;

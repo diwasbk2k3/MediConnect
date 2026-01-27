@@ -1,15 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mediconnect/features/auth/domain/usecases/register_usecase.dart';
-import 'package:mediconnect/features/profile/domain/entities/profile_entity.dart';
 import 'package:mediconnect/features/profile/domain/usecases/create_patient_profile_usecase.dart';
 import 'package:mediconnect/features/profile/domain/usecases/fetch_patient_profile_usecase.dart';
 import 'package:mediconnect/features/profile/domain/usecases/update_patient_image_usecase.dart';
 import 'package:mediconnect/features/profile/presentation/state/profile_state.dart';
 
-final profileViewModelProvider =
-    NotifierProvider<ProfileViewModel, ProfileState>(ProfileViewModel.new);
+final profileViewModelProvider = NotifierProvider<ProfileViewModel, ProfileState>(() => ProfileViewModel(),);
 
 class ProfileViewModel extends Notifier<ProfileState> {
   late final UpdatePatientImageUsecase _updatePatientProfileImageUsecase;
@@ -22,6 +19,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
       updatePatientProfileImageUsecaseProvider,
     );
     _fetchPatientProfileUsecase = ref.read(fetchPatientProfileUsecaseProvider);
+    _createPatientProfileUsecase = ref.read(createPatientProfileUsecaseProvider);
 
     return const ProfileState();
   }

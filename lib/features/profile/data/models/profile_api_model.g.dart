@@ -16,12 +16,20 @@ ProfileApiModel _$ProfileApiModelFromJson(Map<String, dynamic> json) =>
       medicalHistory: json['medicalHistory'] as String?,
     );
 
-Map<String, dynamic> _$ProfileApiModelToJson(ProfileApiModel instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'address': instance.address,
-      'phone': instance.phoneNumber,
-      'gender': instance.gender,
-      'age': instance.age,
-      'medicalHistory': instance.medicalHistory,
-    };
+Map<String, dynamic> _$ProfileApiModelToJson(ProfileApiModel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('name', instance.name);
+  writeNotNull('address', instance.address);
+  writeNotNull('phone', instance.phoneNumber);
+  writeNotNull('gender', instance.gender);
+  writeNotNull('age', instance.age);
+  writeNotNull('medicalHistory', instance.medicalHistory);
+  return val;
+}
