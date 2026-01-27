@@ -1,28 +1,62 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/features/auth/domain/usecases/register_usecase.dart';
+import 'package:mediconnect/features/profile/domain/entities/profile_entity.dart';
+import 'package:mediconnect/features/profile/domain/usecases/create_patient_profile_usecase.dart';
 import 'package:mediconnect/features/profile/domain/usecases/fetch_patient_profile_usecase.dart';
 import 'package:mediconnect/features/profile/domain/usecases/update_patient_image_usecase.dart';
 import 'package:mediconnect/features/profile/presentation/state/profile_state.dart';
 
 final profileViewModelProvider =
-    NotifierProvider<ProfileViewModel, ProfileState>(
-  ProfileViewModel.new,
-);
+    NotifierProvider<ProfileViewModel, ProfileState>(ProfileViewModel.new);
 
 class ProfileViewModel extends Notifier<ProfileState> {
-  late final UpdatePatientImageUsecase
-      _updatePatientProfileImageUsecase;
+  late final UpdatePatientImageUsecase _updatePatientProfileImageUsecase;
   late final FetchPatientProfileDataUsecase _fetchPatientProfileUsecase;
+  late final CreatePatientProfileUsecase _createPatientProfileUsecase;
 
   @override
   ProfileState build() {
-    _updatePatientProfileImageUsecase =
-        ref.read(updatePatientProfileImageUsecaseProvider);
-    _fetchPatientProfileUsecase =
-        ref.read(fetchPatientProfileUsecaseProvider);
+    _updatePatientProfileImageUsecase = ref.read(
+      updatePatientProfileImageUsecaseProvider,
+    );
+    _fetchPatientProfileUsecase = ref.read(fetchPatientProfileUsecaseProvider);
 
     return const ProfileState();
+  }
+
+  // Create patient profile
+  Future<void> createPatientProfile({
+    required String name,
+    required String address,
+    required String phoneNumber,
+    required String gender,
+    required int age,
+    String? medicalHistory,
+  }) async {
+    state = state.copyWith(status: ProfileStatus.loading);
+
+    final params = CreatePatientProfileUsecaseParams(
+      name: name,
+      address: address,
+      phoneNumber: phoneNumber,
+      gender: gender,
+      age: age,
+      medicalHistory: medicalHistory,
+    );
+    final result = await _createPatientProfileUsecase(params);
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: ProfileStatus.error,
+          errorMessage: failure.message,
+        );
+      },
+      (profileEntity) {
+        state = state.copyWith(status: ProfileStatus.created);
+      },
+    );
   }
 
   /// Fetch patient profile data from server

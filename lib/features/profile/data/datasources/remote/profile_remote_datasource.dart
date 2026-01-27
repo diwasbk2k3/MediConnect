@@ -6,7 +6,6 @@ import 'package:mediconnect/core/api/api_endpoints.dart';
 import 'package:mediconnect/core/services/storage/token_service.dart';
 import 'package:mediconnect/features/profile/data/datasources/profile_datasource.dart';
 import 'package:mediconnect/features/profile/data/models/profile_api_model.dart';
-import 'package:mediconnect/features/profile/presentation/pages/create_patient_profile.dart';
 
 // Provider
 final profileRemoteDatasourceProvider = Provider<ProfileRemoteDatasource>((
