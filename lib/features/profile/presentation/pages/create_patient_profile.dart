@@ -71,6 +71,16 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
                               label: "Age",
                               icon: Icons.cake_outlined,
                               keyboardType: TextInputType.number,
+                              validator: (v) {
+                                if (v == null || v.trim().isEmpty) {
+                                  return "Age is required.";
+                                }
+                                final age = int.tryParse(v);
+                                if (age == null || age <= 0) {
+                                  return "Enter a valid age.";
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           Container(
@@ -91,6 +101,15 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
                         label: "Phone Number",
                         icon: Icons.phone_android_outlined,
                         keyboardType: TextInputType.phone,
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) {
+                            return "Phone number is required.";
+                          }
+                          if (v.length < 10) {
+                            return "Enter a valid phone number with 10 digits.";
+                          }
+                          return null;
+                        },
                       ),
                       const Divider(height: 1, indent: 50),
                       _buildTextField(
@@ -98,6 +117,9 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
                         label: "Residential Address",
                         icon: Icons.location_on_outlined,
                         maxLines: 2,
+                        validator: (v) => v == null || v.trim().isEmpty
+                            ? "Address is required."
+                            : null,
                       ),
                     ]),
 

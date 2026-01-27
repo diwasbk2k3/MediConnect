@@ -8,6 +8,7 @@ import 'package:mediconnect/features/auth/data/datasources/local/auth_datasource
 import 'package:mediconnect/features/auth/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
 import 'package:mediconnect/features/profile/presentation/pages/about_patient_info_screen.dart';
+import 'package:mediconnect/features/profile/presentation/pages/create_patient_profile.dart';
 import 'package:mediconnect/features/profile/presentation/state/profile_state.dart';
 import 'package:mediconnect/features/profile/presentation/view_model/profile_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -191,13 +192,31 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
                     subtitle: "Personal information and bio",
                     color: Colors.blue,
                     onTap: () {
-                      // Navigate to the new screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AboutPatientInfoScreen(),
-                        ),
-                      );
+                      final profileState = ref.read(profileViewModelProvider);
+
+                      // Prevent navigation while loading
+                      if (profileState.status == ProfileStatus.loading) {
+                        SnackbarUtils.showInfo(context, "Please wait...");
+                        return;
+                      }
+
+                      if (profileState.name != null) {
+                        // Profile exists → About screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AboutPatientInfoScreen(),
+                          ),
+                        );
+                      } else {
+                        // Profile does NOT exist → Create profile
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const CreatePatientProfile(),
+                          ),
+                        );
+                      }
                     },
                   ),
                   _buildMenuTile(
@@ -241,122 +260,127 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
     );
   }
 
-Widget _buildProfileHeader() {
-  final profileState = ref.watch(profileViewModelProvider);
+  Widget _buildProfileHeader() {
+    final profileState = ref.watch(profileViewModelProvider);
 
-  return Container(
-    width: double.infinity,
-    padding: const EdgeInsets.only(bottom: 25),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      // Curved bottom for a modern feel
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(40),
-        bottomRight: Radius.circular(40),
-      ),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.04),
-          blurRadius: 20,
-          offset: const Offset(0, 10),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.only(bottom: 25),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        // Curved bottom for a modern feel
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(40),
+          bottomRight: Radius.circular(40),
         ),
-      ],
-    ),
-    child: Column(
-      children: [
-        Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            // Outer Ring for Depth
-            Container(
-              padding: const EdgeInsets.all(4), // Space for the ring
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [Colors.blue.shade200, Colors.blue.shade600],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 4),
-                ),
-                child: CircleAvatar(
-                  radius: 55,
-                  backgroundColor: Colors.grey[100],
-                  backgroundImage: _selectedMedia.isNotEmpty
-                      ? FileImage(File(_selectedMedia.first.path)) as ImageProvider
-                      : profileState.profileImageUrl != null
-                          ? NetworkImage(
-                              '${ApiEndpoints.baseUrl}/${profileState.profileImageUrl}',
-                            ) as ImageProvider
-                          : const AssetImage("assets/images/profile.png"),
-                ),
-              ),
-            ),
-            // Refined Camera Button
-            GestureDetector(
-              onTap: _pickMedia,
-              child: Container(
-                height: 38,
-                width: 38,
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade700,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.camera_alt_rounded,
-                  size: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        // Name Section
-        Text(
-          profileState.status == ProfileStatus.loading
-              ? "Loading..."
-              : profileState.name ?? "N/A",
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w900, // Extra bold for professional look
-            color: Color(0xFF1A1C1E),
-            letterSpacing: -0.5,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
-        ),
-        const SizedBox(height: 6),
-        // Sub-badge for a polished finish
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.verified_user_rounded, size: 14, color: Colors.blue.shade400),
-            const SizedBox(width: 4),
-            Text(
-              "Verified Patient",
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey.shade600,
+        ],
+      ),
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              // Outer Ring for Depth
+              Container(
+                padding: const EdgeInsets.all(4), // Space for the ring
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [Colors.blue.shade200, Colors.blue.shade600],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 4),
+                  ),
+                  child: CircleAvatar(
+                    radius: 55,
+                    backgroundColor: Colors.grey[100],
+                    backgroundImage: _selectedMedia.isNotEmpty
+                        ? FileImage(File(_selectedMedia.first.path))
+                              as ImageProvider
+                        : profileState.profileImageUrl != null
+                        ? NetworkImage(
+                                '${ApiEndpoints.baseUrl}/${profileState.profileImageUrl}',
+                              )
+                              as ImageProvider
+                        : const AssetImage("assets/images/profile.png"),
+                  ),
+                ),
               ),
+              // Refined Camera Button
+              GestureDetector(
+                onTap: _pickMedia,
+                child: Container(
+                  height: 38,
+                  width: 38,
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade700,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt_rounded,
+                    size: 18,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Name Section
+          Text(
+            profileState.status == ProfileStatus.loading
+                ? "Loading..."
+                : profileState.name ?? "N/A",
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+              color: Color(0xFF1A1C1E),
+              letterSpacing: -0.5,
             ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
+          ),
+          const SizedBox(height: 6),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.verified_user_rounded,
+                size: 14,
+                color: Colors.blue.shade400,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                "Verified Patient",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildMenuTile({
     required IconData icon,
