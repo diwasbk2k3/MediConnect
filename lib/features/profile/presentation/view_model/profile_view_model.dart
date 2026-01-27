@@ -44,7 +44,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
           patientId: profileData['patientId'] as String?,
           name: profileData['name'] as String?,
           address: profileData['address'] as String?,
-          phone: profileData['phone'] as String?,
+          phoneNumber: profileData['phone'] as String?,
           gender: profileData['gender'] as String?,
           age: profileData['age'] as int?,
           medicalHistory: profileData['medicalHistory'] as String?,

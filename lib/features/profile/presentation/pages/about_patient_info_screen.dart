@@ -64,7 +64,7 @@ class AboutPatientInfoScreen extends ConsumerWidget {
                 _InfoItem(
                   Icons.phone_android_outlined,
                   "Phone",
-                  profileState.phone ?? "N/A",
+                  profileState.phoneNumber ?? "N/A",
                 ),
                 _InfoItem(
                   Icons.location_on_outlined,

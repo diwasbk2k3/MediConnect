@@ -9,7 +9,7 @@ class ProfileState extends Equatable {
   final String? patientId;
   final String? name;
   final String? address;
-  final String? phone;
+  final String? phoneNumber;
   final String? gender;
   final int? age;
   final String? medicalHistory;
@@ -27,7 +27,7 @@ class ProfileState extends Equatable {
     this.patientId,
     this.name,
     this.address,
-    this.phone,
+    this.phoneNumber,
     this.gender,
     this.age,
     this.medicalHistory,
@@ -41,7 +41,7 @@ class ProfileState extends Equatable {
     String? patientId,
     String? name,
     String? address,
-    String? phone,
+    String? phoneNumber,
     String? gender,
     int? age,
     String? medicalHistory,
@@ -57,7 +57,7 @@ class ProfileState extends Equatable {
       patientId: patientId ?? this.patientId,
       name: name ?? this.name,
       address: address ?? this.address,
-      phone: phone ?? this.phone,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
       gender: gender ?? this.gender,
       age: age ?? this.age,
       medicalHistory: medicalHistory ?? this.medicalHistory,
@@ -79,7 +79,7 @@ class ProfileState extends Equatable {
     patientId,
     name,
     address,
-    phone,
+    phoneNumber,
     gender,
     age,
     medicalHistory,
