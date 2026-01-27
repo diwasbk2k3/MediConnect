@@ -5,6 +5,7 @@ import 'package:mediconnect/core/api/api_client.dart';
 import 'package:mediconnect/core/api/api_endpoints.dart';
 import 'package:mediconnect/core/services/storage/token_service.dart';
 import 'package:mediconnect/features/profile/data/datasources/profile_datasource.dart';
+import 'package:mediconnect/features/profile/presentation/pages/create_patient_profile.dart';
 
 // Provider
 final profileRemoteDatasourceProvider = Provider<ProfileRemoteDatasource>((
@@ -41,16 +42,28 @@ class ProfileRemoteDatasource implements IProfileRemoteDatasource {
   @override
   Future<String> updatePatientProfileImage(File image) async {
     final fileName = image.path.split('/').last;
-    final multipartFile = await MultipartFile.fromFile(image.path,filename: fileName,);
-    final formData = FormData.fromMap({
-      "myfile": multipartFile,
-    });
+    final multipartFile = await MultipartFile.fromFile(
+      image.path,
+      filename: fileName,
+    );
+    final formData = FormData.fromMap({"myfile": multipartFile});
     // Get token from the token service
     final token = _tokenService.getToken();
 
     final response = await _apiClient.patchFile(
       ApiEndpoints.updatePatientImage,
       formData: formData,
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+    return response.data["result"];
+  }
+
+  @override
+  Future<void> createPatientProfile(Object profileData) async {
+    final token = _tokenService.getToken();
+    final response = await _apiClient.post(
+      ApiEndpoints.createPatientProfile,
+      data: profileData,
       options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
     return response.data["result"];
