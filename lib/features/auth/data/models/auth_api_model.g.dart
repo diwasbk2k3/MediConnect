@@ -10,7 +10,7 @@ AuthApiModel _$AuthApiModelFromJson(Map<String, dynamic> json) => AuthApiModel(
       email: json['email'] as String?,
       password: json['password'] as String?,
       confirmPassword: json['confirmPassword'] as String?,
-      phoneNumber: json['phoneNumber'] as String?,
+      phoneNumber: json['phone'] as String?,
       termsAgreed: json['termsAgreed'] as bool?,
     );
 
@@ -19,6 +19,6 @@ Map<String, dynamic> _$AuthApiModelToJson(AuthApiModel instance) =>
       'email': instance.email,
       'password': instance.password,
       'confirmPassword': instance.confirmPassword,
-      'phoneNumber': instance.phoneNumber,
+      'phone': instance.phoneNumber,
       'termsAgreed': instance.termsAgreed,
     };
