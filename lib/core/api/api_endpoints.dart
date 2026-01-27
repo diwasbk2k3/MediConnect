@@ -31,5 +31,6 @@ class ApiEndpoints {
   // ============ Auth Endpoints ============
   static const String userLogin = '/auth/login';
   static const String userRegister = '/auth/signup';
+  static const String getPatientProfileInfo = '/profile/patient/me';
   static const String updatePatientImage = '/profile/image/patient/update';
 }

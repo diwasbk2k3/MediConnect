@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mediconnect/core/api/api_endpoints.dart';
 import 'package:mediconnect/core/utils/snackbar_utils.dart';
 import 'package:mediconnect/features/auth/data/datasources/local/auth_datasource.dart';
 import 'package:mediconnect/features/auth/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
+import 'package:mediconnect/features/profile/presentation/pages/about_patient_info_screen.dart';
+import 'package:mediconnect/features/profile/presentation/state/profile_state.dart';
 import 'package:mediconnect/features/profile/presentation/view_model/profile_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -19,6 +22,15 @@ class ProfileScreenUI extends ConsumerStatefulWidget {
 class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
   final List<XFile> _selectedMedia = [];
   final ImagePicker _imagePicker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch profile data when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(profileViewModelProvider.notifier).fetchPatientProfileData();
+    });
+  }
 
   Future<bool> _takPermissionFromUser(Permission permission) async {
     final status = await permission.status;
@@ -82,7 +94,9 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
         _selectedMedia.add(image);
       });
       // upload image to server
-      await ref.read(profileViewModelProvider.notifier).updatePatientProfileImage(File(image.path));
+      await ref
+          .read(profileViewModelProvider.notifier)
+          .updatePatientProfileImage(File(image.path));
     }
   }
 
@@ -105,12 +119,14 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
           imageQuality: 80,
         );
         if (image != null) {
-            setState(() {
-              _selectedMedia.clear();
-              _selectedMedia.add(image);
-            });
-            // upload image to server
-            await ref.read(profileViewModelProvider.notifier).updatePatientProfileImage(File(image.path));
+          setState(() {
+            _selectedMedia.clear();
+            _selectedMedia.add(image);
+          });
+          // upload image to server
+          await ref
+              .read(profileViewModelProvider.notifier)
+              .updatePatientProfileImage(File(image.path));
         }
       }
     } catch (err) {
@@ -158,19 +174,9 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),
-      appBar: AppBar(
-        title: const Text(
-          "My Profile",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
             _buildProfileHeader(),
             const SizedBox(height: 30),
             Padding(
@@ -184,7 +190,15 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
                     title: "About Me",
                     subtitle: "Personal information and bio",
                     color: Colors.blue,
-                    onTap: () {},
+                    onTap: () {
+                      // Navigate to the new screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AboutPatientInfoScreen(),
+                        ),
+                      );
+                    },
                   ),
                   _buildMenuTile(
                     icon: Icons.lock_rounded,
@@ -227,45 +241,81 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
     );
   }
 
-  Widget _buildProfileHeader() {
-    return Column(
+Widget _buildProfileHeader() {
+  final profileState = ref.watch(profileViewModelProvider);
+
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.only(bottom: 25),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      // Curved bottom for a modern feel
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(40),
+        bottomRight: Radius.circular(40),
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.04),
+          blurRadius: 20,
+          offset: const Offset(0, 10),
+        ),
+      ],
+    ),
+    child: Column(
       children: [
         Stack(
           alignment: Alignment.bottomRight,
           children: [
+            // Outer Ring for Depth
             Container(
+              padding: const EdgeInsets.all(4), // Space for the ring
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 4),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
+                gradient: LinearGradient(
+                  colors: [Colors.blue.shade200, Colors.blue.shade600],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              child: CircleAvatar(
-                radius: 55,
-                backgroundColor: Colors.grey[200],
-                backgroundImage: _selectedMedia.isNotEmpty
-                    ? FileImage(File(_selectedMedia.first.path))
-                          as ImageProvider
-                    : const AssetImage("assets/images/profile.png"),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 4),
+                ),
+                child: CircleAvatar(
+                  radius: 55,
+                  backgroundColor: Colors.grey[100],
+                  backgroundImage: _selectedMedia.isNotEmpty
+                      ? FileImage(File(_selectedMedia.first.path)) as ImageProvider
+                      : profileState.profileImageUrl != null
+                          ? NetworkImage(
+                              '${ApiEndpoints.baseUrl}/${profileState.profileImageUrl}',
+                            ) as ImageProvider
+                          : const AssetImage("assets/images/profile.png"),
+                ),
               ),
             ),
+            // Refined Camera Button
             GestureDetector(
               onTap: _pickMedia,
               child: Container(
-                height: 35,
-                width: 35,
+                height: 38,
+                width: 38,
                 decoration: BoxDecoration(
-                  color: Colors.green,
+                  color: Colors.blue.shade700,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: Colors.white, width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: const Icon(
-                  Icons.camera_alt,
+                  Icons.camera_alt_rounded,
                   size: 18,
                   color: Colors.white,
                 ),
@@ -273,14 +323,40 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
             ),
           ],
         ),
-        const SizedBox(height: 15),
-        const Text(
-          "DIWAS BISHWOKARMA",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+        const SizedBox(height: 16),
+        // Name Section
+        Text(
+          profileState.status == ProfileStatus.loading
+              ? "Loading..."
+              : profileState.name ?? "N/A",
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w900, // Extra bold for professional look
+            color: Color(0xFF1A1C1E),
+            letterSpacing: -0.5,
+          ),
+        ),
+        const SizedBox(height: 6),
+        // Sub-badge for a polished finish
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.verified_user_rounded, size: 14, color: Colors.blue.shade400),
+            const SizedBox(width: 4),
+            Text(
+              "Verified Patient",
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ],
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildMenuTile({
     required IconData icon,

@@ -30,9 +30,17 @@ class RemoteProfileRepository implements IProfileRemoteRepository {
        _profileRemoteDatasource = profileRemoteDatasource;
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> fetchPatientProfileData() {
-    // TODO: implement fetchPatientProfileData
-    throw UnimplementedError();
+  Future<Either<Failure, Map<String, dynamic>>> fetchPatientProfileData() async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final profileData = await _profileRemoteDatasource.fetchPatientProfileData();
+        return Right(profileData);
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
   }
 
   @override

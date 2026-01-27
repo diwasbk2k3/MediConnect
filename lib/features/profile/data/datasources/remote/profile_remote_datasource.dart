@@ -29,9 +29,13 @@ class ProfileRemoteDatasource implements IProfileRemoteDatasource {
        _tokenService = tokenService;
 
   @override
-  Future<Map<String, dynamic>> fetchPatientProfileData() {
-    // TODO: implement fetchProfile
-    throw UnimplementedError();
+  Future<Map<String, dynamic>> fetchPatientProfileData() async {
+    final token = _tokenService.getToken();
+    final response = await _apiClient.get(
+      ApiEndpoints.getPatientProfileInfo,
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+    return response.data["result"] as Map<String, dynamic>;
   }
 
   @override
