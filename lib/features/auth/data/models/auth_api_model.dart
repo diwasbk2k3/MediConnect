@@ -1,4 +1,10 @@
+
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mediconnect/features/auth/domain/entities/auth_entity.dart';
+
+part 'auth_api_model.g.dart';
+
+@JsonSerializable()
 
 class AuthApiModel {
   final String? email;
@@ -15,27 +21,12 @@ class AuthApiModel {
     this.termsAgreed,
   });
 
-  // from JSON
-  factory AuthApiModel.fromJson(Map<String, dynamic> json) {
-    return AuthApiModel(
-      email: json['email'] as String?,
-      password: json['password'] as String?,
-      confirmPassword: json['confirmPassword'] as String?,
-      phoneNumber: json['phoneNumber'] as String?,
-      termsAgreed: json['termsAgreed'] as bool?,
-    );
-  }
+  // From Json
+  factory AuthApiModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthApiModelFromJson(json);
 
-  // to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'password': password,
-      'confirmPassword': confirmPassword,
-      'phoneNumber': phoneNumber,
-      'termsAgreed': termsAgreed ?? false,
-    };
-  }
+  // To Json
+  Map<String, dynamic> toJson() => _$AuthApiModelToJson(this);
 
   // from Entity
   factory AuthApiModel.fromEntity(AuthEntity entity) {
