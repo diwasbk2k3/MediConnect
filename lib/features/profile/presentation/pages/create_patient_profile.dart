@@ -321,9 +321,11 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
             fontWeight: FontWeight.w600,
             color: Colors.black87,
           ),
-          items: ['male', 'female', 'others'].map((String value) {
-            return DropdownMenuItem<String>(value: value, child: Text(value));
-          }).toList(),
+          items: const [
+            DropdownMenuItem(value: 'male', child: Text('Male')),
+            DropdownMenuItem(value: 'female', child: Text('Female')),
+            DropdownMenuItem(value: 'others', child: Text('Others')),
+          ],
           onChanged: (newValue) => setState(() => _selectedGender = newValue!),
         ),
       ),
@@ -349,8 +351,8 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
       ),
       child: ElevatedButton(
         onPressed: profileState.status == ProfileStatus.loading
-          ? null
-          : _handleCreateProfile, // disables button when loading
+            ? null
+            : _handleCreateProfile, // disables button when loading
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,

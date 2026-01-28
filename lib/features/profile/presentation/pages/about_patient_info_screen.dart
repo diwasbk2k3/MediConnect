@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/features/profile/presentation/pages/update_patient_profile_info.dart';
 import 'package:mediconnect/features/profile/presentation/view_model/profile_view_model.dart';
 
 class _InfoItem {
@@ -19,7 +20,8 @@ class AboutPatientInfoScreen extends ConsumerStatefulWidget {
       _AboutPatientInfoScreenState();
 }
 
-class _AboutPatientInfoScreenState extends ConsumerState<AboutPatientInfoScreen> {
+class _AboutPatientInfoScreenState
+    extends ConsumerState<AboutPatientInfoScreen> {
   @override
   void initState() {
     super.initState();
@@ -44,6 +46,26 @@ class _AboutPatientInfoScreenState extends ConsumerState<AboutPatientInfoScreen>
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => UpdatePatientProfileInfo(
+                    name: profileState.name ?? '',
+                    age: profileState.age ?? 0,
+                    gender: profileState.gender ?? 'male',
+                    phone: profileState.phoneNumber ?? '',
+                    address: profileState.address ?? '',
+                    medicalHistory: profileState.medicalHistory ?? '',
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
         backgroundColor: Colors.white,
         elevation: 0.5,
       ),
