@@ -64,14 +64,12 @@ class RemoteProfileRepository implements IProfileRemoteRepository {
   }
 
   @override
-  Future<Either<Failure, ProfileEntity>> createPatientProfile(ProfileEntity profile) async {
+  Future<Either<Failure, ProfileEntity>> createPatientProfile(ProfileEntity profileEntity) async {
     if (await _networkInfo.isConnected) {
       try {
         // Go to remote
-        final apiModel = ProfileApiModel.fromEntity(profile);
-        final result = await _profileRemoteDatasource.createPatientProfile(
-          apiModel,
-        );
+        final apiModel = ProfileApiModel.fromEntity(profileEntity);
+        final result = await _profileRemoteDatasource.createPatientProfile(apiModel);
         return Right(result.toEntity());
       } on DioException catch (err) {
         return Left(
@@ -84,6 +82,23 @@ class RemoteProfileRepository implements IProfileRemoteRepository {
         return Left(ApiFailure(message: err.toString()));
       }
     } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
+  }
+  
+  @override
+  Future<Either<Failure, ProfileEntity>> updatePatientProfileInfo(ProfileEntity profileEntity) async{
+    if(await _networkInfo.isConnected ){
+      try{
+        final apiModel = ProfileApiModel.fromEntity(profileEntity);
+        final result = await _profileRemoteDatasource.updatePatientProfileInfo(apiModel);
+        return Right(result.toEntity());
+      }on DioException catch (err){
+        return Left( ApiFailure(message: err.message ?? "Failed to update profile info!",statusCode: err.response?.statusCode));
+      }catch (err){
+        return Left(ApiFailure(message: err.toString()));
+      }
+    }else{
       return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
