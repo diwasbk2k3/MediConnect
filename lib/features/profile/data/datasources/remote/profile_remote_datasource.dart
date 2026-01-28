@@ -47,9 +47,7 @@ class ProfileRemoteDatasource implements IProfileRemoteDatasource {
       filename: fileName,
     );
     final formData = FormData.fromMap({"myfile": multipartFile});
-    // Get token from the token service
     final token = _tokenService.getToken();
-
     final response = await _apiClient.patchFile(
       ApiEndpoints.updatePatientImage,
       formData: formData,
@@ -67,7 +65,19 @@ class ProfileRemoteDatasource implements IProfileRemoteDatasource {
       data: profile.toJson(),
       options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
+    return ProfileApiModel.fromJson(response.data['result']);
+  }
 
+  @override
+  Future<ProfileApiModel> updatePatientProfileInfo(
+    ProfileApiModel profile,
+  ) async {
+    final token = _tokenService.getToken();
+    final response = await _apiClient.put(
+      ApiEndpoints.updatePatientProfileInfo,
+      data: profile.toJson(),
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
     return ProfileApiModel.fromJson(response.data['result']);
   }
 }

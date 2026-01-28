@@ -35,6 +35,6 @@ class ApiEndpoints {
   // ============ Profile Endpoints ============
   static const String getPatientProfileInfo = '/profile/patient/me';
   static const String createPatientProfile = '/profile/patient/create';
-  static const String updatePatientProfile = '/profile/patient/update-info';
+  static const String updatePatientProfileInfo = '/profile/patient/update-info';
   static const String updatePatientImage = '/profile/image/patient/update';
 }
