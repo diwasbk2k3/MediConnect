@@ -36,7 +36,7 @@ class UpdatePatientProfileInfoUsecaseParams extends Equatable {
 }
 
 // Provider implementation for Create Patient Profile Usecase
-final createPatientProfileUsecaseProvider = Provider<UpdatePatientProfileInfoUsecase>((ref) {
+final updatePatientProfileInfoUsecaseProvider = Provider<UpdatePatientProfileInfoUsecase>((ref) {
   final profileRepository = ref.watch(remoteProfileRepositoryProvider);
   return UpdatePatientProfileInfoUsecase(profileRepository: profileRepository);
 });
