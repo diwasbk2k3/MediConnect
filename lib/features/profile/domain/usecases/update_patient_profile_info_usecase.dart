@@ -53,7 +53,8 @@ class UpdatePatientProfileInfoUsecase implements UseCaseWithParams<ProfileEntity
     final entity = ProfileEntity(
       name: params.name,
       address: params.address,
-      gender: params.address,
+      phoneNumber: params.phoneNumber,
+      gender: params.gender,
       age: params.age,
       medicalHistory: params.medicalHistory,
     );
