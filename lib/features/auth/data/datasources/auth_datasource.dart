@@ -6,14 +6,11 @@ abstract interface class IAuthLocalDatasource {
   Future<bool> login(String email, String password);
   Future<AuthHiveModel?> getCurrentUser();
   Future<bool> logout();
-
-  // Get Email Exists
-  Future<bool> isEmailExists(String email);
 }
 
 abstract interface class IAuthRemoteDatasource {
   Future<AuthApiModel> register(AuthApiModel model);
   Future<AuthApiModel> login(String email, String password);
-  Future<AuthApiModel?> getCurrentUser();
+  Future<String> changePassword(String currentPassword, String newPassword, String confirmPassword);
   Future<void> logout();
 }
