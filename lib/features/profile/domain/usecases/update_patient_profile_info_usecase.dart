@@ -42,9 +42,9 @@ final updatePatientProfileInfoUsecaseProvider = Provider<UpdatePatientProfileInf
 });
 
 class UpdatePatientProfileInfoUsecase implements UseCaseWithParams<ProfileEntity, UpdatePatientProfileInfoUsecaseParams> {
-  final IProfileRemoteRepository _profileRepository;
+  final IProfileRepository _profileRepository;
 
-  UpdatePatientProfileInfoUsecase({required IProfileRemoteRepository profileRepository})
+  UpdatePatientProfileInfoUsecase({required IProfileRepository profileRepository})
     : _profileRepository = profileRepository;
   @override
   Future<Either<Failure, ProfileEntity>> call(

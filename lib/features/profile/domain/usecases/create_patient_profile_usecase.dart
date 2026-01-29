@@ -42,9 +42,9 @@ final createPatientProfileUsecaseProvider = Provider<CreatePatientProfileUsecase
 });
 
 class CreatePatientProfileUsecase implements UseCaseWithParams<ProfileEntity,   CreatePatientProfileUsecaseParams>{
-  final IProfileRemoteRepository _profileRepository;
+  final IProfileRepository _profileRepository;
 
-  CreatePatientProfileUsecase({required IProfileRemoteRepository profileRepository})
+  CreatePatientProfileUsecase({required IProfileRepository profileRepository})
     : _profileRepository = profileRepository;
 
   @override

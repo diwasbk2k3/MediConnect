@@ -90,12 +90,10 @@ class _UpdatePatientProfileInfoState
       } else if (previous?.status != ProfileStatus.updated &&
           next.status == ProfileStatus.updated) {
         SnackbarUtils.showSuccess(context, 'Profile updated successfully');
-        Future.delayed(const Duration(milliseconds: 500), () {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const BottomLayoutScreen()),
           );
-        });
       }
     });
 

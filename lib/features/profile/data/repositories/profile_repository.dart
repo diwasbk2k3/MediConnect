@@ -11,7 +11,7 @@ import 'package:mediconnect/features/profile/domain/entities/profile_entity.dart
 import 'package:mediconnect/features/profile/domain/repositories/profile_repository.dart';
 
 // Provider
-final remoteProfileRepositoryProvider = Provider<IProfileRemoteRepository>((
+final remoteProfileRepositoryProvider = Provider<IProfileRepository>((
   ref,
 ) {
   final networkInfo = ref.read(networkInfoProvider);
@@ -22,7 +22,7 @@ final remoteProfileRepositoryProvider = Provider<IProfileRemoteRepository>((
   );
 });
 
-class RemoteProfileRepository implements IProfileRemoteRepository {
+class RemoteProfileRepository implements IProfileRepository {
   final NetworkInfo _networkInfo;
   final ProfileRemoteDatasource _profileRemoteDatasource;
 
