@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mediconnect/features/auth/domain/entities/auth_entity.dart';
-enum AuthStatus{initial, loading, authenticated, unauthenticated, registered, error}
+enum AuthStatus{initial, loading, authenticated, unauthenticated, registered, error, passwordChanged}
 
 class AuthState extends Equatable{
   final AuthStatus status;

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/features/auth/domain/usecases/change_password_usecase.dart';
 import 'package:mediconnect/features/auth/domain/usecases/login_usecase.dart';
 import 'package:mediconnect/features/auth/domain/usecases/register_usecase.dart';
 import 'package:mediconnect/features/auth/presentation/state/auth_state.dart';
@@ -11,11 +12,13 @@ final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(
 class AuthViewModel extends Notifier<AuthState> {
   late final RegisterUsecase _registerUsecase;
   late final LoginUsecase _loginUsecase;
+  late final ChangePasswordUsecase _changePasswordUsecase;
 
   @override
   AuthState build() {
     _registerUsecase = ref.read(registerUsecaseProvider);
     _loginUsecase = ref.read(loginUsecaseProvider);
+    _changePasswordUsecase = ref.read(changePasswordUsecaseProvider);
     return const AuthState();
   }
 
@@ -65,6 +68,26 @@ class AuthViewModel extends Notifier<AuthState> {
         state = state.copyWith(
           status: AuthStatus.authenticated,
           authEntity: authEntity,
+        );
+      },
+    );
+  }
+
+  // Change Password method
+  Future<void> changePassword({required String currentPassword, required String newPassword, required String confirmPassword}) async {
+    state = state.copyWith(status: AuthStatus.loading);
+    final params = ChangePasswordUsecaseParams(currentPassword: currentPassword, newPassword: newPassword, confirmPassword: confirmPassword);
+    final result = await _changePasswordUsecase(params);
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: failure.message,
+        );
+      },
+      (message) {
+        state = state.copyWith(
+          status: AuthStatus.passwordChanged
         );
       },
     );
