@@ -23,6 +23,8 @@ void main() {
         email: 'fallback@email.com',
         password: 'fallback',
         confirmPassword: 'fallback',
+        phoneNumber: '1234567890',
+        termsAgreed: true
       ),
     );
   });
