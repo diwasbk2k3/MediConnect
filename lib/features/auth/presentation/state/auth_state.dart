@@ -16,14 +16,16 @@ class AuthState extends Equatable{
   AuthState copyWith({
     AuthStatus? status,
     AuthEntity? authEntity,
-    String? errorMessage,
+    String? errorMessage = _undefined,
   }){
     return AuthState(
       status: status ?? this.status,
       authEntity: authEntity ?? this.authEntity,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage: errorMessage == _undefined ? this.errorMessage : errorMessage,
     );
   }
+
+  static const _undefined = '__undefined__';
   
   @override
   List<Object?> get props => [status, authEntity, errorMessage]; 
