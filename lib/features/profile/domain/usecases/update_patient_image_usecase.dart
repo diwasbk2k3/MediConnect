@@ -14,9 +14,9 @@ final updatePatientProfileImageUsecaseProvider = Provider<UpdatePatientImageUsec
 });
 
 class UpdatePatientImageUsecase implements UseCaseWithParams<String, File> {
-  final IProfileRemoteRepository _repository;
+  final IProfileRepository _repository;
 
-  UpdatePatientImageUsecase({required IProfileRemoteRepository repository})
+  UpdatePatientImageUsecase({required IProfileRepository repository})
       : _repository = repository;
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/features/profile/presentation/pages/update_patient_profile_info.dart';
 import 'package:mediconnect/features/profile/presentation/view_model/profile_view_model.dart';
 
 class _InfoItem {
@@ -11,11 +12,27 @@ class _InfoItem {
   _InfoItem(this.icon, this.label, this.value, {this.isLongText = false});
 }
 
-class AboutPatientInfoScreen extends ConsumerWidget {
+class AboutPatientInfoScreen extends ConsumerStatefulWidget {
   const AboutPatientInfoScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AboutPatientInfoScreen> createState() =>
+      _AboutPatientInfoScreenState();
+}
+
+class _AboutPatientInfoScreenState
+    extends ConsumerState<AboutPatientInfoScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch patient profile data when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(profileViewModelProvider.notifier).fetchPatientProfileData();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final profileState = ref.watch(profileViewModelProvider);
 
     return Scaffold(
@@ -29,6 +46,26 @@ class AboutPatientInfoScreen extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => UpdatePatientProfileInfo(
+                    name: profileState.name ?? '',
+                    age: profileState.age ?? 0,
+                    gender: profileState.gender ?? 'male',
+                    phone: profileState.phoneNumber ?? '',
+                    address: profileState.address ?? '',
+                    medicalHistory: profileState.medicalHistory ?? '',
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
         backgroundColor: Colors.white,
         elevation: 0.5,
       ),
@@ -64,7 +101,7 @@ class AboutPatientInfoScreen extends ConsumerWidget {
                 _InfoItem(
                   Icons.phone_android_outlined,
                   "Phone",
-                  profileState.phone ?? "N/A",
+                  profileState.phoneNumber ?? "N/A",
                 ),
                 _InfoItem(
                   Icons.location_on_outlined,

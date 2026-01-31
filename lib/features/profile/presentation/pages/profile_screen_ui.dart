@@ -6,6 +6,7 @@ import 'package:mediconnect/core/api/api_endpoints.dart';
 import 'package:mediconnect/core/utils/snackbar_utils.dart';
 import 'package:mediconnect/features/auth/data/datasources/local/auth_datasource.dart';
 import 'package:mediconnect/features/auth/data/datasources/remote/auth_remote_data_source.dart';
+import 'package:mediconnect/features/auth/presentation/pages/change_password_screen.dart';
 import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
 import 'package:mediconnect/features/profile/presentation/pages/about_patient_info_screen.dart';
 import 'package:mediconnect/features/profile/presentation/pages/create_patient_profile.dart';
@@ -224,7 +225,14 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
                     title: "Change Password",
                     subtitle: "Update your security credentials",
                     color: Colors.orange,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ChangePasswordScreen(),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 15),
                   _buildSectionTitle("ACTIONS"),

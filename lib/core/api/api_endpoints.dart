@@ -31,9 +31,11 @@ class ApiEndpoints {
   // ============ Auth Endpoints ============
   static const String userLogin = '/auth/login';
   static const String userRegister = '/auth/signup';
+  static const String changePassword = '/auth/update-password';
 
   // ============ Profile Endpoints ============
   static const String getPatientProfileInfo = '/profile/patient/me';
   static const String createPatientProfile = '/profile/patient/create';
+  static const String updatePatientProfileInfo = '/profile/patient/update-info';
   static const String updatePatientImage = '/profile/image/patient/update';
 }

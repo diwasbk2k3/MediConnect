@@ -12,9 +12,9 @@ final fetchPatientProfileUsecaseProvider = Provider<FetchPatientProfileDataUseca
 });
 
 class FetchPatientProfileDataUsecase implements UseCaseWithoutParams<Map<String, dynamic>> {
-  final IProfileRemoteRepository _repository;
+  final IProfileRepository _repository;
 
-  FetchPatientProfileDataUsecase({required IProfileRemoteRepository repository})
+  FetchPatientProfileDataUsecase({required IProfileRepository repository})
       : _repository = repository;
 
   @override

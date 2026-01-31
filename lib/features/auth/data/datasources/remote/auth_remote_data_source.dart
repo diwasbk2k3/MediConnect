@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/api/api_client.dart';
 import 'package:mediconnect/core/api/api_endpoints.dart';
@@ -28,11 +29,6 @@ class AuthRemoteDataSource implements IAuthRemoteDatasource {
        _userSessionService = userSessionService,
        _tokenService = tokenService;
 
-  @override
-  Future<AuthApiModel?> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
-  }
 
   @override
   Future<AuthApiModel> login(String email, String password) async {
@@ -84,5 +80,20 @@ class AuthRemoteDataSource implements IAuthRemoteDatasource {
       return user;
     }
     return user;
+  }
+  
+  @override
+  Future<String> changePassword(String currentPassword, String newPassword, String confirmPassword) async{
+    final token = _tokenService.getToken();
+    final response = await _apiClient.put(
+      ApiEndpoints.changePassword,
+      data: {
+        "currentPassword": currentPassword,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword,
+      },
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );  
+    return response.data["message"];
   }
 }

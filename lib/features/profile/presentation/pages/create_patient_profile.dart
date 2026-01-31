@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/core/utils/snackbar_utils.dart';
+import 'package:mediconnect/features/profile/presentation/pages/about_patient_info_screen.dart';
+import 'package:mediconnect/features/profile/presentation/state/profile_state.dart';
+import 'package:mediconnect/features/profile/presentation/view_model/profile_view_model.dart';
 
 class CreatePatientProfile extends ConsumerStatefulWidget {
   const CreatePatientProfile({super.key});
@@ -17,17 +21,57 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
   final _ageController = TextEditingController();
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
-  final _historyController = TextEditingController();
-  String _selectedGender = 'Male';
+  final _medicalHistoryController = TextEditingController();
+  String _selectedGender = 'male';
 
-  void _submitForm() {
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _ageController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    _medicalHistoryController.dispose();
+    super.dispose();
+  }
+
+  void _handleCreateProfile() {
     if (_formKey.currentState!.validate()) {
-      debugPrint("Saving Profile: ${_nameController.text}");
+      ref
+          .read(profileViewModelProvider.notifier)
+          .createPatientProfile(
+            name: _nameController.text.trim(),
+            address: _addressController.text.trim(),
+            phoneNumber: _phoneController.text.trim(),
+            gender: _selectedGender,
+            age: int.parse(_ageController.text.trim()),
+            medicalHistory: _medicalHistoryController.text.trim().isEmpty
+                ? null
+                : _medicalHistoryController.text.trim(),
+          );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final profileState = ref.watch(profileViewModelProvider);
+
+    ref.listen<ProfileState>(profileViewModelProvider, (previous, next) {
+      if (next.status == ProfileStatus.error) {
+        SnackbarUtils.showError(
+          context,
+          next.errorMessage ?? 'Registration failed',
+        );
+      } else if (next.status == ProfileStatus.created) {
+        SnackbarUtils.showSuccess(context, 'Registration successful');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AboutPatientInfoScreen(),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),
       appBar: AppBar(
@@ -127,7 +171,7 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
                     _buildSectionTitle("MEDICAL SUMMARY"),
                     _buildInputCard([
                       _buildTextField(
-                        controller: _historyController,
+                        controller: _medicalHistoryController,
                         label: "Medical History",
                         icon: Icons.history_edu_outlined,
                         maxLines: 4,
@@ -136,7 +180,7 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
                     ]),
 
                     const SizedBox(height: 40),
-                    _buildSubmitButton(),
+                    _buildSubmitButton(profileState),
                     const SizedBox(height: 30),
                   ],
                 ),
@@ -277,16 +321,18 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
             fontWeight: FontWeight.w600,
             color: Colors.black87,
           ),
-          items: ['Male', 'Female', 'Other'].map((String value) {
-            return DropdownMenuItem<String>(value: value, child: Text(value));
-          }).toList(),
+          items: const [
+            DropdownMenuItem(value: 'male', child: Text('Male')),
+            DropdownMenuItem(value: 'female', child: Text('Female')),
+            DropdownMenuItem(value: 'others', child: Text('Others')),
+          ],
           onChanged: (newValue) => setState(() => _selectedGender = newValue!),
         ),
       ),
     );
   }
 
-  Widget _buildSubmitButton() {
+  Widget _buildSubmitButton(ProfileState profileState) {
     return Container(
       width: double.infinity,
       height: 56,
@@ -304,7 +350,9 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: _submitForm,
+        onPressed: profileState.status == ProfileStatus.loading
+            ? null
+            : _handleCreateProfile, // disables button when loading
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
@@ -312,8 +360,10 @@ class _CreatePatientProfileState extends ConsumerState<CreatePatientProfile> {
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        child: const Text(
-          "Complete Registration",
+        child: Text(
+          profileState.status == ProfileStatus.loading
+              ? 'Registering...'
+              : 'Complete Registration',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
