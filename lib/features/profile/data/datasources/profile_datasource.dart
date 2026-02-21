@@ -6,5 +6,5 @@ abstract interface class IProfileRemoteDatasource {
   Future<Map<String, dynamic>> fetchPatientProfileData();
   Future<ProfileApiModel> createPatientProfile(ProfileApiModel model);
   Future<ProfileApiModel> updatePatientProfileInfo(ProfileApiModel model);
-  Future<void> updatePatientProfileImage(File image);
+  Future<String> updatePatientProfileImage(File image);
 }

@@ -33,7 +33,6 @@ class AuthLocalDatasource implements IAuthLocalDatasource {
     }
   }
 
-  @override
   Future<bool> isEmailExists(String email) async {
     try {
       return await _hiveService.isEmailExists(email);
