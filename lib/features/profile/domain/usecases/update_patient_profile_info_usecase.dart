@@ -46,6 +46,7 @@ class UpdatePatientProfileInfoUsecase implements UseCaseWithParams<ProfileEntity
 
   UpdatePatientProfileInfoUsecase({required IProfileRepository profileRepository})
     : _profileRepository = profileRepository;
+    
   @override
   Future<Either<Failure, ProfileEntity>> call(
     UpdatePatientProfileInfoUsecaseParams params,

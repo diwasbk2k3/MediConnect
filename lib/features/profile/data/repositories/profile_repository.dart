@@ -33,8 +33,7 @@ class RemoteProfileRepository implements IProfileRepository {
        _profileRemoteDatasource = profileRemoteDatasource;
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>>
-  fetchPatientProfileData() async {
+  Future<Either<Failure, Map<String, dynamic>>> fetchPatientProfileData() async {
     if (await _networkInfo.isConnected) {
       try {
         final profileData = await _profileRemoteDatasource
@@ -85,9 +84,9 @@ class RemoteProfileRepository implements IProfileRepository {
       return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
-  
+
   @override
-  Future<Either<Failure, ProfileEntity>> updatePatientProfileInfo(ProfileEntity profileEntity) async{
+  Future<Either<Failure, ProfileEntity>> updatePatientProfileInfo(ProfileEntity profileEntity) async {
     if(await _networkInfo.isConnected ){
       try{
         final apiModel = ProfileApiModel.fromEntity(profileEntity);
