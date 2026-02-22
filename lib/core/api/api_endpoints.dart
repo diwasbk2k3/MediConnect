@@ -32,6 +32,7 @@ class ApiEndpoints {
   static const String userLogin = '/auth/login';
   static const String userRegister = '/auth/signup';
   static const String changePassword = '/auth/update-password';
+  static const String deleteUserAccount = '/auth/delete-account';
 
   // ============ Profile Endpoints ============
   static String getPatientProfileInfo(String patientId) => '/profile/patient/$patientId';
@@ -43,7 +44,20 @@ class ApiEndpoints {
   static const String getAllApprovedHospitals = "/profile/hospital/approved";
   static String getHospitalProfileInfo(String hospitalId) => '/profile/hospital/$hospitalId';
 
+  // ============ Appointment Endpoints ============
+  static String bookAppointment(String hospitalId) => '/appointment/booking/$hospitalId';
+  static String getAppointmentsByStatusForPatient(String status) => '/appointment/patient?status=$status';
+  static String visitedHospitalsByPatient(String patientId) => '/appointment/patient/visited-hospitals/$patientId';
+  static String cancelAppointment(String appointmentId) => '/appointment/cancel-booking/$appointmentId';
+
+  // ============ Report Endpoints ============
+  static String getReportByAppointmentId(String appointmentId) => '/report/$appointmentId';
+  static String getReportsByPatient(String patientId) => '/report/patient/$patientId';
+
   // ============ Rating Endpoints ============
   static String giveRatingToHospital(String hospitalId)=> '/rating/give/$hospitalId';
   static String averageRatingOfHospital(String hospitalId)=> '/rating/received-by-hospital/$hospitalId';
+
+  // ============ Medical Assistant ============
+  static String askMedicalAssistant = '/ai/ask';
 }

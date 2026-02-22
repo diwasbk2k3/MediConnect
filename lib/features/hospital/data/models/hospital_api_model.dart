@@ -12,6 +12,8 @@ class HospitalApiModel {
   final String? description;
   final List<Map<String, dynamic>>? departments;
   final String? profileImageUrl;
+  final double? newAppointmentCharge;
+  final double? followUpAppointmentCharge;
 
   HospitalApiModel({
     this.hospitalId,
@@ -21,6 +23,8 @@ class HospitalApiModel {
     this.description,
     this.departments,
     this.profileImageUrl,
+    this.newAppointmentCharge,
+    this.followUpAppointmentCharge,
   });
 
   // From Json
@@ -40,6 +44,8 @@ class HospitalApiModel {
       description: description,
       departments: departments,
       profileImageUrl: profileImageUrl,
+      newAppointmentCharge: newAppointmentCharge,
+      followUpAppointmentCharge: followUpAppointmentCharge,
     );
   }
 }

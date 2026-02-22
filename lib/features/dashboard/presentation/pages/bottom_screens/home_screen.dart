@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mediconnect/features/dashboard/presentation/pages/view_hospitals_screen.dart';
 import 'package:mediconnect/core/widgets/dashboard_card_widget.dart';
+import 'package:mediconnect/features/report/presentation/pages/reports_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -30,19 +31,18 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
     
-            // Book Appointments Card
-            DashboardCard(
-              icon: 'assets/icons/book_appointment.png',
-              title: 'Book Appointments',
-              onTap: () {},
-            ),
-            const SizedBox(height: 16),
-    
             // View Reports Card
             DashboardCard(
               icon: 'assets/icons/health_report.png',
               title: 'View Reports',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReportsListScreen(),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 16),
     

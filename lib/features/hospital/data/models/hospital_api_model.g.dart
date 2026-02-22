@@ -17,6 +17,9 @@ HospitalApiModel _$HospitalApiModelFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as Map<String, dynamic>)
           .toList(),
       profileImageUrl: json['profileImageUrl'] as String?,
+      newAppointmentCharge: (json['newAppointmentCharge'] as num?)?.toDouble(),
+      followUpAppointmentCharge:
+          (json['followUpAppointmentCharge'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$HospitalApiModelToJson(HospitalApiModel instance) {
@@ -35,5 +38,7 @@ Map<String, dynamic> _$HospitalApiModelToJson(HospitalApiModel instance) {
   writeNotNull('description', instance.description);
   writeNotNull('departments', instance.departments);
   writeNotNull('profileImageUrl', instance.profileImageUrl);
+  writeNotNull('newAppointmentCharge', instance.newAppointmentCharge);
+  writeNotNull('followUpAppointmentCharge', instance.followUpAppointmentCharge);
   return val;
 }

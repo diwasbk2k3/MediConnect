@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/api/api_endpoints.dart';
+import 'package:mediconnect/features/appointment/presentation/pages/appointment_booking_screen.dart';
 import 'package:mediconnect/features/hospital/presentation/view_model/hospital_detail_view_model.dart';
 import 'package:mediconnect/features/hospital/presentation/widgets/give_rating_form.dart';
 
@@ -299,6 +300,50 @@ class HospitalProfileScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+              const SizedBox(height: 32),
+
+              // Book Appointment Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AppointmentBookingScreen(
+                          hospitalId: hospital.hospitalId ?? '',
+                          hospitalName: hospital.name ?? 'Hospital',
+                          departments: hospital.departments,
+                          newAppointmentCharge: hospital.newAppointmentCharge ?? 500.0,
+                          followUpAppointmentCharge: hospital.followUpAppointmentCharge ?? 300.0,
+                        ),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4FA3F5),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.calendar_month, color: Colors.white),
+                      SizedBox(width: 8),
+                      Text(
+                        'Book Appointment',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(height: 32),
 
               // Rating Section Placeholder
