@@ -38,4 +38,8 @@ class ApiEndpoints {
   static const String createPatientProfile = '/profile/patient/create';
   static String updatePatientProfileInfo(String patientId) => '/profile/patient/update-info/$patientId';
   static const String updatePatientImage = '/profile/image/patient/update';
+  
+  // ============ Hospital Endpoints ============
+  static const String getAllApprovedHospitals = "/profile/hospital/approved";
+  static String averageRatingOfHospital(String hospitalId)=> '/rating/received-by-hospital/$hospitalId';
 }
