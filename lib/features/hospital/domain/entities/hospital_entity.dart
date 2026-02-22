@@ -8,6 +8,7 @@ class HospitalEntity extends Equatable {
   final String? description;
   final List<Map<String, dynamic>>? departments;
   final double? rating;
+  final String? profileImageUrl;
 
   const HospitalEntity({
     this.hospitalId,
@@ -17,6 +18,7 @@ class HospitalEntity extends Equatable {
     this.description,
     this.departments,
     this.rating,
+    this.profileImageUrl,
   });
 
   HospitalEntity copyWith({
@@ -27,6 +29,7 @@ class HospitalEntity extends Equatable {
     String? description,
     List<Map<String, dynamic>>? departments,
     double? rating,
+    String? profileImageUrl,
   }) {
     return HospitalEntity(
       hospitalId: hospitalId ?? this.hospitalId,
@@ -36,6 +39,7 @@ class HospitalEntity extends Equatable {
       description: description ?? this.description,
       departments: departments ?? this.departments,
       rating: rating ?? this.rating,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
     );
   }
 
@@ -48,5 +52,6 @@ class HospitalEntity extends Equatable {
     description,
     departments,
     rating,
+    profileImageUrl,
   ];
 }

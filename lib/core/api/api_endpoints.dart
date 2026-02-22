@@ -41,5 +41,6 @@ class ApiEndpoints {
   
   // ============ Hospital Endpoints ============
   static const String getAllApprovedHospitals = "/profile/hospital/approved";
+  static String getHospitalProfileInfo(String hospitalId) => '/profile/hospital/$hospitalId';
   static String averageRatingOfHospital(String hospitalId)=> '/rating/received-by-hospital/$hospitalId';
 }

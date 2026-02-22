@@ -11,6 +11,7 @@ class HospitalApiModel {
   final String? phone;
   final String? description;
   final List<Map<String, dynamic>>? departments;
+  final String? profileImageUrl;
 
   HospitalApiModel({
     this.hospitalId,
@@ -19,6 +20,7 @@ class HospitalApiModel {
     this.phone,
     this.description,
     this.departments,
+    this.profileImageUrl,
   });
 
   // From Json
@@ -37,6 +39,7 @@ class HospitalApiModel {
       phone: phone,
       description: description,
       departments: departments,
+      profileImageUrl: profileImageUrl,
       rating: rating,
     );
   }

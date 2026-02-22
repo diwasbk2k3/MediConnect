@@ -52,6 +52,28 @@ class RemoteHospitalRepository implements IHospitalRepository {
   }
 
   @override
+  Future<Either<Failure, HospitalEntity>> getHospitalProfileInfo(String hospitalId) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final hospital = await _hospitalRemoteDatasource
+            .getHospitalProfileInfo(hospitalId);
+        return Right(hospital.toEntity());
+      } on DioException catch (err) {
+        return Left(
+          ApiFailure(
+            message: err.message ?? "Failed to fetch hospital",
+            statusCode: err.response?.statusCode,
+          ),
+        );
+      } catch (err) {
+        return Left(ApiFailure(message: err.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
+  }
+
+  @override
   Future<Either<Failure, double>> getAverageRatingOfHospital(
       String hospitalId) async {
     if (await _networkInfo.isConnected) {

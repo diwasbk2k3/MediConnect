@@ -43,6 +43,18 @@ class HospitalRemoteDatasource implements IHospitalRemoteDatasource {
   }
 
   @override
+  Future<HospitalApiModel> getHospitalProfileInfo(String hospitalId) async {
+    final token = _tokenService.getToken();
+    
+    final response = await _apiClient.get(
+      ApiEndpoints.getHospitalProfileInfo(hospitalId),
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+    
+    return HospitalApiModel.fromJson(response.data["result"] as Map<String, dynamic>);
+  }
+
+  @override
   Future<Map<String, dynamic>> getAverageRatingOfHospital(
       String hospitalId) async {
     final token = _tokenService.getToken();

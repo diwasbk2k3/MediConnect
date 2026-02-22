@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/utils/snackbar_utils.dart';
+import 'package:mediconnect/features/hospital/presentation/pages/hospital_profile_screen.dart';
 import 'package:mediconnect/features/hospital/presentation/state/hospital_state.dart';
 import 'package:mediconnect/features/hospital/presentation/view_model/hospital_view_model.dart';
 
@@ -461,9 +462,13 @@ class _ViewHospitalsScreenState extends ConsumerState<ViewHospitalsScreen> {
                       elevation: 2,
                     ),
                     onPressed: () {
-                      SnackbarUtils.showSuccess(
+                      Navigator.push(
                         context,
-                        'View hospital details for ${hospital.name}',
+                        MaterialPageRoute(
+                          builder: (context) => HospitalProfileScreen(
+                            hospitalId: hospital.hospitalId ?? '',
+                          ),
+                        ),
                       );
                     },
                     icon: const Icon(Icons.arrow_forward, size: 16),
