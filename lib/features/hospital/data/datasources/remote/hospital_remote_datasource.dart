@@ -65,4 +65,20 @@ class HospitalRemoteDatasource implements IHospitalRemoteDatasource {
     );
     return response.data["result"] as Map<String, dynamic>;
   }
+
+  @override
+  Future<Map<String, dynamic>> giveRatingToHospital({
+    required String hospitalId,
+    required int rating,
+  }) async {
+    final token = _tokenService.getToken();
+    
+    final response = await _apiClient.put(
+      ApiEndpoints.giveRatingToHospital(hospitalId),
+      data: {'rating': rating},
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+    
+    return response.data as Map<String, dynamic>;
+  }
 }

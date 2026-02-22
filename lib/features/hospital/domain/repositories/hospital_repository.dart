@@ -6,4 +6,5 @@ abstract interface class IHospitalRepository {
   Future<Either<Failure, List<HospitalEntity>>> getAllApprovedHospitals();
   Future<Either<Failure, HospitalEntity>> getHospitalProfileInfo(String hospitalId);
   Future<Either<Failure, double>> getAverageRatingOfHospital(String hospitalId);
+  Future<Either<Failure, bool>> giveRatingToHospital({required String hospitalId,required int rating});
 }

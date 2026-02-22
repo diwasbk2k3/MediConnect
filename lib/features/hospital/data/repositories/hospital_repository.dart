@@ -96,4 +96,31 @@ class RemoteHospitalRepository implements IHospitalRepository {
       return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> giveRatingToHospital({
+    required String hospitalId,
+    required int rating,
+  }) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        await _hospitalRemoteDatasource.giveRatingToHospital(
+          hospitalId: hospitalId,
+          rating: rating,
+        );
+        return const Right(true);
+      } on DioException catch (err) {
+        return Left(
+          ApiFailure(
+            message: err.message ?? "Failed to submit rating",
+            statusCode: err.response?.statusCode,
+          ),
+        );
+      } catch (err) {
+        return Left(ApiFailure(message: err.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
+  }
 }

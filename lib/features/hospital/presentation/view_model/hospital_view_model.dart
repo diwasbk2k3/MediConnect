@@ -3,6 +3,7 @@ import 'package:mediconnect/features/hospital/domain/usecases/get_all_approved_h
 import 'package:mediconnect/features/hospital/domain/usecases/get_average_rating_usecase.dart';
 import 'package:mediconnect/features/hospital/presentation/state/hospital_state.dart';
 
+// Provider
 final hospitalViewModelProvider =
     NotifierProvider<HospitalViewModel, HospitalState>(
         () => HospitalViewModel());

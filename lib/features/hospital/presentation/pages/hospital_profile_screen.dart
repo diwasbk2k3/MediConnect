@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/api/api_endpoints.dart';
 import 'package:mediconnect/features/hospital/presentation/view_model/hospital_detail_view_model.dart';
+import 'package:mediconnect/features/hospital/presentation/widgets/give_rating_form.dart';
 
 class HospitalProfileScreen extends ConsumerWidget {
   final String hospitalId;
@@ -301,63 +302,7 @@ class HospitalProfileScreen extends ConsumerWidget {
               const SizedBox(height: 32),
 
               // Rating Section Placeholder
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.amber.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.amber.shade200),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.star, color: Colors.amber, size: 20),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Give Rating',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Share your experience with this hospital',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber.shade500,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        onPressed: () {
-                          // TODO: Implement rating functionality
-                        },
-                        child: const Text(
-                          'Rate Hospital',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              GiveRatingForm(hospitalId: hospital.hospitalId ?? ''),
               const SizedBox(height: 20),
             ],
           ),

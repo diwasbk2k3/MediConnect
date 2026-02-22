@@ -29,9 +29,9 @@ class HospitalApiModel {
 
   // To Json
   Map<String, dynamic> toJson() => _$HospitalApiModelToJson(this);
-
-  // To Entity (without rating)
-  HospitalEntity toEntity({double? rating}) {
+ 
+  // To Entity
+  HospitalEntity toEntity() {
     return HospitalEntity(
       hospitalId: hospitalId,
       name: name,
@@ -40,7 +40,6 @@ class HospitalApiModel {
       description: description,
       departments: departments,
       profileImageUrl: profileImageUrl,
-      rating: rating,
     );
   }
 }
