@@ -96,4 +96,20 @@ class AuthRemoteDataSource implements IAuthRemoteDatasource {
     );  
     return response.data["message"];
   }
+  
+  @override
+  Future<String> deleteAccount(String password) async {
+    final token = _tokenService.getToken();
+    final response = await _apiClient.delete(
+      ApiEndpoints.deleteUserAccount,
+      data: {"password": password},
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+    
+    // Clear session and token after successful deletion
+    await _userSessionService.clearUserSession();
+    await _tokenService.removeToken();
+    
+    return response.data["message"];
+  }
 }
