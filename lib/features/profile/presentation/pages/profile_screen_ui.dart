@@ -24,14 +24,22 @@ class ProfileScreenUI extends ConsumerStatefulWidget {
 class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
   final List<XFile> _selectedMedia = [];
   final ImagePicker _imagePicker = ImagePicker();
+  late final TextEditingController _passwordController;
 
   @override
   void initState() {
     super.initState();
+    _passwordController = TextEditingController();
     // Fetch profile data when screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(profileViewModelProvider.notifier).fetchPatientProfileData();
     });
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
   }
 
   Future<bool> _takPermissionFromUser(Permission permission) async {
@@ -243,6 +251,14 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
                     color: Colors.red,
                     isDestructive: true,
                     onTap: () => _handleLogout(context, ref),
+                  ),
+                  _buildMenuTile(
+                    icon: Icons.delete_forever_rounded,
+                    title: "Delete Account",
+                    subtitle: "Permanently delete your account and data",
+                    color: Colors.red,
+                    isDestructive: true,
+                    onTap: _showDeleteAccountDialog,
                   ),
                 ],
               ),
@@ -483,6 +499,98 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("Logout failed: $e")));
+      }
+    }
+  }
+
+  // Show Delete Account Dialog
+  void _showDeleteAccountDialog() {
+    _passwordController.clear();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text("Delete Account"),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "This action cannot be undone. Please enter your password to confirm account deletion.",
+                style: TextStyle(fontSize: 13, color: Colors.grey),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: "Enter your password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _handleDeleteAccount();
+            },
+            child: const Text("Delete", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Handle Delete Account
+  void _handleDeleteAccount() async {
+    final password = _passwordController.text.trim();
+
+    if (password.isEmpty) {
+      SnackbarUtils.showError(context, "Please enter your password");
+      return;
+    }
+
+    try {
+      await ref
+          .read(profileViewModelProvider.notifier)
+          .deleteAccount(password);
+
+      final profileState = ref.read(profileViewModelProvider);
+
+      if (profileState.status == ProfileStatus.deleted) {
+        if (mounted) {
+          SnackbarUtils.showSuccess(context, "Account deleted successfully");
+          Future.delayed(const Duration(seconds: 1), () {
+            if (mounted) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            }
+          });
+        }
+      } else if (profileState.status == ProfileStatus.error) {
+        if (mounted) {
+          SnackbarUtils.showError(
+            context,
+            profileState.errorMessage ?? "Failed to delete account",
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(context, "Failed to delete account: $e");
       }
     }
   }

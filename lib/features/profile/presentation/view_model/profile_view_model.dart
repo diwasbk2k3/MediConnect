@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/features/auth/domain/usecases/delete_account_usecase.dart';
 import 'package:mediconnect/features/profile/domain/usecases/create_patient_profile_usecase.dart';
 import 'package:mediconnect/features/profile/domain/usecases/fetch_patient_profile_usecase.dart';
 import 'package:mediconnect/features/profile/domain/usecases/update_patient_image_usecase.dart';
@@ -15,6 +15,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
   late final FetchPatientProfileDataUsecase _fetchPatientProfileUsecase;
   late final CreatePatientProfileUsecase _createPatientProfileUsecase;
   late final UpdatePatientProfileInfoUsecase _updatePatientProfileInfoUsecase;
+  late final DeleteAccountUsecase _deleteAccountUsecase;
   @override
   ProfileState build() {
     _updatePatientProfileImageUsecase = ref.read(
@@ -27,6 +28,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
     _updatePatientProfileInfoUsecase = ref.read(
       updatePatientProfileInfoUsecaseProvider,
     );
+    _deleteAccountUsecase = ref.read(deleteAccountUsecaseProvider);
 
     return const ProfileState();
   }
@@ -146,6 +148,26 @@ class ProfileViewModel extends Notifier<ProfileState> {
           profileImageUrl: imageUrl,
           resetProfileImage: true,
         );
+      },
+    );
+  }
+
+  /// Delete patient account
+  Future<void> deleteAccount(String password) async {
+    state = state.copyWith(status: ProfileStatus.loading);
+
+    final params = DeleteAccountUsecaseParams(password: password);
+    final result = await _deleteAccountUsecase(params);
+
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: ProfileStatus.error,
+          errorMessage: failure.message,
+        );
+      },
+      (message) {
+        state = state.copyWith(status: ProfileStatus.deleted);
       },
     );
   }
