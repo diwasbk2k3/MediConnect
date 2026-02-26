@@ -165,4 +165,29 @@ class AuthRepository implements IAuthRepository {
       return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
+  
+  @override
+  Future<Either<Failure, String>> deleteAccount(String password) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final message = await _authRemoteDataSource.deleteAccount(password);
+        // Also clear local session after successful deletion
+        try {
+          await _authDatasource.logout();
+        } catch (_) {}
+        return Right(message);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data["message"] ?? "Account deletion failed",
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (err) {
+        return Left(ApiFailure(message: err.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
+  }
 }
