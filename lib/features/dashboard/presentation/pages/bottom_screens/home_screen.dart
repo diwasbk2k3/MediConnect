@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mediconnect/features/dashboard/presentation/pages/view_hospitals_screen.dart';
 import 'package:mediconnect/core/widgets/dashboard_card_widget.dart';
 import 'package:mediconnect/features/report/presentation/pages/reports_list_screen.dart';
+import 'package:mediconnect/features/assistant/presentation/pages/medical_assistant_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -50,7 +51,14 @@ class HomeScreen extends StatelessWidget {
             DashboardCard(
               icon: 'assets/icons/chatbot.png',
               title: 'ChatBot',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MedicalAssistantScreen(),
+                  ),
+                );
+              },
             ),
           ],
         ),
