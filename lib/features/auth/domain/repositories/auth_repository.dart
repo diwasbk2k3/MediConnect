@@ -9,4 +9,5 @@ abstract interface class IAuthRepository {
   Future<Either<Failure, String>> changePassword(String currentPassword, String newPassword, String confirmPassword); 
   Future<Either<Failure, bool>> logout();
   Future<Either<Failure, String>> deleteAccount(String password);
+  Future<Either<Failure, String>> sendPasswordResetEmail(String email);
 }
