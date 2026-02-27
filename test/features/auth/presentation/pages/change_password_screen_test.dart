@@ -198,6 +198,112 @@ void main() {
     });
   });
 
+  group('ChangePasswordScreen - Additional Widget Tests', () {
+    testWidgets('should allow current password entry', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      final formFields = find.byType(TextFormField);
+      await tester.enterText(formFields.at(0), 'oldpassword123');
+      await tester.pump();
+
+      expect(find.text('oldpassword123'), findsOneWidget);
+    });
+
+    testWidgets('should allow new password entry', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      final formFields = find.byType(TextFormField);
+      await tester.enterText(formFields.at(1), 'newpassword123');
+      await tester.pump();
+
+      expect(find.text('newpassword123'), findsOneWidget);
+    });
+
+    testWidgets('should allow confirm password entry', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      final formFields = find.byType(TextFormField);
+      await tester.enterText(formFields.at(2), 'newpassword123');
+      await tester.pump();
+
+      expect(find.text('newpassword123'), findsOneWidget);
+    });
+
+    testWidgets('should display Update Password button text', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.text('Update Password'), findsOneWidget);
+    });
+
+    testWidgets('should have all three password field labels', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.text('Current Password'), findsOneWidget);
+      expect(find.text('New Password'), findsOneWidget);
+      expect(find.text('Confirm Password'), findsOneWidget);
+    });
+
+    testWidgets('should display close icon in AppBar', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.byIcon(Icons.close), findsOneWidget);
+    });
+
+    testWidgets('should have Change Password title in AppBar', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.text('Change Password'), findsOneWidget);
+    });
+
+    testWidgets('should allow clearing all password fields', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      final formFields = find.byType(TextFormField);
+      
+      // Enter text in all fields
+      await tester.enterText(formFields.at(0), 'oldpassword123');
+      await tester.enterText(formFields.at(1), 'newpassword123');
+      await tester.enterText(formFields.at(2), 'newpassword123');
+      await tester.pump();
+
+      // Clear all fields
+      await tester.enterText(formFields.at(0), '');
+      await tester.enterText(formFields.at(1), '');
+      await tester.enterText(formFields.at(2), '');
+      await tester.pump();
+
+      final controller0 = tester.widget<TextFormField>(formFields.at(0)).controller;
+      final controller1 = tester.widget<TextFormField>(formFields.at(1)).controller;
+      final controller2 = tester.widget<TextFormField>(formFields.at(2)).controller;
+
+      expect(controller0?.text, '');
+      expect(controller1?.text, '');
+      expect(controller2?.text, '');
+    });
+
+    testWidgets('should have proper form structure', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(TextFormField), findsNWidgets(3));
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(AppBar), findsOneWidget);
+    });
+
+    testWidgets('should display CHANGE PASSWORD section header', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.text('CHANGE PASSWORD'), findsOneWidget);
+    });
+
+    testWidgets('should have lock icons for password security indication', (WidgetTester tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      final lockIcons = find.byIcon(Icons.lock_outline);
+      expect(lockIcons, findsWidgets);
+    });
+  });
+
   group('ChangePasswordScreen UI Styling', () {
     testWidgets('should use light grey background', (WidgetTester tester) async {
       await tester.pumpWidget(createTestWidget());
