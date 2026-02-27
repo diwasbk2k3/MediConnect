@@ -86,7 +86,7 @@ class _MedicalAssistantScreenState extends ConsumerState<MedicalAssistantScreen>
                         .textTheme
                         .labelSmall
                         ?.copyWith(
-                          color: const Color(0xF87171),
+                          color: const Color(0xFFF87171),
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5,
                         ),

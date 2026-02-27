@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/core/api/api_client.dart';
 import 'package:mediconnect/features/splash/presentation/pages/splash_screen.dart';
 import 'package:mediconnect/app/theme/theme_data.dart';
 
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: getApplicationTheme(),
+        navigatorKey: navigatorKey,
         home: const SplashScreen()
       ),
     );

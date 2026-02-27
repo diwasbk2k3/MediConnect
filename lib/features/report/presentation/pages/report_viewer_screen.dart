@@ -16,6 +16,7 @@ class ReportViewerScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(report.department ?? 'Report'),
         backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         elevation: 0,
       ),
       body: isPdf 

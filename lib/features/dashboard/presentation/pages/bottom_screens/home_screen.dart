@@ -47,10 +47,10 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
     
-            // ChatBot Card
+            // Medical Assistant Card
             DashboardCard(
               icon: 'assets/icons/chatbot.png',
-              title: 'ChatBot',
+              title: 'Medical Assistant',
               onTap: () {
                 Navigator.push(
                   context,

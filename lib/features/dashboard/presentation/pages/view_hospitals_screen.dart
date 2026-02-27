@@ -22,12 +22,23 @@ class _ViewHospitalsScreenState extends ConsumerState<ViewHospitalsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(hospitalViewModelProvider.notifier).fetchAllApprovedHospitals();
     });
+    
+    // Add listener to search controller for real-time search and UI updates
+    _searchController.addListener(() {
+      _onSearchChanged();
+      setState(() {}); // Rebuild to update clear button visibility
+    });
   }
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onSearchChanged() {
+    ref.read(hospitalViewModelProvider.notifier).searchHospitals(_searchController.text);
   }
 
   @override
@@ -77,6 +88,15 @@ class _ViewHospitalsScreenState extends ConsumerState<ViewHospitalsScreen> {
                   hintText: 'Search hospitals',
                   hintStyle: const TextStyle(color: Colors.grey),
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, color: Colors.grey),
+                          onPressed: () {
+                            _searchController.clear();
+                            _onSearchChanged();
+                          },
+                        )
+                      : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                     borderSide: const BorderSide(color: Colors.grey),
@@ -131,11 +151,13 @@ class _ViewHospitalsScreenState extends ConsumerState<ViewHospitalsScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // "Available Hospitals" text
+                  // "Available Hospitals" text with count
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      'Available Hospitals (${hospitalState.hospitals.length})',
+                      hospitalState.searchQuery.isEmpty
+                          ? 'Available Hospitals (${hospitalState.hospitals.length})'
+                          : 'Search Results (${hospitalState.filteredHospitals.length})',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -145,31 +167,68 @@ class _ViewHospitalsScreenState extends ConsumerState<ViewHospitalsScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Hospital List
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: hospitalState.hospitals.length,
-                      itemBuilder: (context, index) {
-                        return _buildHospitalCard(
-                          hospitalState.hospitals[index],
-                        );
-                      },
+                  // Hospital List - Show filtered hospitals
+                  if (hospitalState.filteredHospitals.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: hospitalState.filteredHospitals.length,
+                        itemBuilder: (context, index) {
+                          return _buildHospitalCard(
+                            hospitalState.filteredHospitals[index],
+                          );
+                        },
+                      ),
                     ),
-                  ),
+
+                  // No Search Results
+                  if (hospitalState.filteredHospitals.isEmpty &&
+                      hospitalState.searchQuery.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(32),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 64,
+                              color: Colors.grey.shade300,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No hospitals found for "${hospitalState.searchQuery}"',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Try searching with a different name or location',
+                              style: TextStyle(
+                                color: Colors.grey.shade400,
+                                fontSize: 12,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
 
-            // Empty State
+            // Empty State - No hospitals loaded initially
             if (hospitalState.status == HospitalStatus.loaded &&
                 hospitalState.hospitals.isEmpty)
               const Center(
                 child: Padding(
                   padding: EdgeInsets.all(32),
                   child: Text(
-                    'No hospitals found',
+                    'No hospitals available',
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),

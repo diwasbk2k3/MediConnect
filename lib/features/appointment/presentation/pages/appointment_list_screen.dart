@@ -315,6 +315,7 @@ class _AppointmentListScreenState extends ConsumerState<AppointmentListScreen>
                   ...[
                     const SizedBox(height: 12),
                     Container(
+                      width: double.infinity,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.red.shade50,
@@ -468,6 +469,7 @@ class _AppointmentListScreenState extends ConsumerState<AppointmentListScreen>
                     },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red.shade700,
+                foregroundColor: Colors.white,
               ),
               child: isLoading
                   ? const SizedBox(

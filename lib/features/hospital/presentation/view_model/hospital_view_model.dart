@@ -53,8 +53,33 @@ class HospitalViewModel extends Notifier<HospitalState> {
         state = state.copyWith(
           status: HospitalStatus.loaded,
           hospitals: hospitalsWithRatings,
+          filteredHospitals: hospitalsWithRatings,
         );
       },
     );
+  }
+
+  /// Search hospitals by name, address, or description
+  void searchHospitals(String query) {
+    state = state.copyWith(searchQuery: query);
+
+    if (query.isEmpty) {
+      // If search is empty, show all hospitals
+      state = state.copyWith(filteredHospitals: state.hospitals);
+    } else {
+      // Filter hospitals based on search query
+      final filtered = state.hospitals.where((hospital) {
+        final name = hospital.name?.toLowerCase() ?? '';
+        final address = hospital.address?.toLowerCase() ?? '';
+        final description = hospital.description?.toLowerCase() ?? '';
+        final searchLower = query.toLowerCase();
+
+        return name.contains(searchLower) ||
+            address.contains(searchLower) ||
+            description.contains(searchLower);
+      }).toList();
+
+      state = state.copyWith(filteredHospitals: filtered);
+    }
   }
 }
