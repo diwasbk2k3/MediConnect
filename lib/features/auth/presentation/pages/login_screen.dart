@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/features/dashboard/presentation/pages/bottom_layout_screen.dart';
 import 'package:mediconnect/features/auth/presentation/pages/signup_screen.dart';
+import 'package:mediconnect/features/auth/presentation/pages/forgot_password_screen.dart';
 import 'package:mediconnect/features/auth/presentation/state/auth_state.dart';
 import 'package:mediconnect/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:mediconnect/core/utils/snackbar_utils.dart';
@@ -253,10 +254,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          // TODO: Forgot password logic
-                          SnackbarUtils.showInfo(
+                          Navigator.push(
                             context,
-                            'Forgot password feature coming soon',
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgotPasswordScreen(),
+                            ),
                           );
                         },
                         child: const Text(

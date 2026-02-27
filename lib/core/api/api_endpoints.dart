@@ -33,7 +33,7 @@ class ApiEndpoints {
   static const String userRegister = '/auth/signup';
   static const String changePassword = '/auth/update-password';
   static const String deleteUserAccount = '/auth/delete-account';
-  static const String resetAccountPassword = '/auth/reset-account-password';
+  static const String sendPasswordResetEmail = '/auth/send-password-reset-email';
 
   // ============ Profile Endpoints ============
   static String getPatientProfileInfo(String patientId) => '/profile/patient/$patientId';
