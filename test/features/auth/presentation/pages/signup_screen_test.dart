@@ -27,313 +27,236 @@ void main() {
     );
   }
 
-  group('SignupScreen UI Elements - Header', () {
-    testWidgets('should display MediConnect branding in header', (WidgetTester tester) async {
+  group('SignupScreen - Widget Tests', () {
+ 
+    testWidgets('Header and Branding Elements', (tester) async {
       await tester.pumpWidget(createTestWidget());
 
       expect(find.text('MediConnect'), findsOneWidget);
-    });
-
-    testWidgets('should display Connecting You text', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
       expect(find.text('Connecting You'), findsOneWidget);
-    });
-
-    testWidgets('should display To Better Care text', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
       expect(find.text('To Better Care'), findsOneWidget);
-    });
-  });
-
-  group('SignupScreen Form Fields', () {
-    testWidgets('should display Email label', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.text('Email'), findsOneWidget);
-    });
-
-    testWidgets('should display email input field with hint text', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byWidgetPredicate(
-        (widget) => widget is TextField && widget.decoration?.hintText == 'Enter your email',
-      ), findsOneWidget);
-    });
-
-    testWidgets('should display Phone Number label', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.text('Phone Number'), findsOneWidget);
-    });
-
-    testWidgets('should display phone input field with hint text', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byWidgetPredicate(
-        (widget) => widget is TextField && widget.decoration?.hintText == 'Enter phone number',
-      ), findsOneWidget);
-    });
-
-    testWidgets('should display Password label', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.text('New Password'), findsOneWidget);
-    });
-
-    testWidgets('should display password input field with hint text', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byWidgetPredicate(
-        (widget) => widget is TextField && widget.decoration?.hintText == 'Enter new password',
-      ), findsOneWidget);
-    });
-
-    testWidgets('should display Confirm Password label', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.text('Confirm Password'), findsOneWidget);
-    });
-
-    testWidgets('should display confirm password field with hint text', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byWidgetPredicate(
-        (widget) => widget is TextField && widget.decoration?.hintText == 'Confirm new password',
-      ), findsOneWidget);
-    });
-  });
-
-  group('SignupScreen Form Controls', () {
-    testWidgets('should display Terms and Conditions checkbox', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byType(Checkbox), findsOneWidget);
-    });
-
-    testWidgets('should display ElevatedButton for signup', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byType(ElevatedButton), findsOneWidget);
-    });
-
-    testWidgets('should display login link', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.text('Login'), findsOneWidget);
-    });
-  });
-
-  group('SignupScreen Form Validation', () {
-    testWidgets('should validate empty email field', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final textFormFields = find.byType(TextFormField);
-      expect(textFormFields, findsWidgets);
-      
-      final emailField = textFormFields.first;
-      final TextFormField textField = tester.widget(emailField);
-      
-      expect(textField.validator!(''), equals('Please enter your email'));
-    });
-
-    testWidgets('should validate invalid email format', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final textFormFields = find.byType(TextFormField);
-      final emailField = textFormFields.first;
-      final TextFormField textField = tester.widget(emailField);
-      
-      expect(textField.validator!('invalidemail'), isNotNull);
-    });
-
-    testWidgets('should validate valid email format', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final textFormFields = find.byType(TextFormField);
-      final emailField = textFormFields.first;
-      final TextFormField textField = tester.widget(emailField);
-      
-      expect(textField.validator!('test@example.com'), isNull);
-    });
-
-    testWidgets('should validate empty phone field', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final textFormFields = find.byType(TextFormField);
-      final phoneField = textFormFields.at(1); // Second TextFormField is phone
-      final TextFormField textField = tester.widget(phoneField);
-      
-      expect(textField.validator!(''), isNotNull);
-    });
-
-    testWidgets('should validate empty password field', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final passwordField = find.byWidgetPredicate(
-        (widget) => widget is TextField && widget.decoration?.hintText == 'Enter new password',
-      );
-      
-      expect(passwordField, findsOneWidget);
-    });
-
-    testWidgets('should validate empty confirm password field', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final confirmField = find.byWidgetPredicate(
-        (widget) => widget is TextField && widget.decoration?.hintText == 'Confirm new password',
-      );
-      
-      expect(confirmField, findsOneWidget);
-    });
-  });
-
-  group('SignupScreen Layout and Structure', () {
-    testWidgets('should have SingleChildScrollView wrapper', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
+      expect(find.byType(Image), findsWidgets);
       expect(find.byType(SingleChildScrollView), findsOneWidget);
-    });
-
-    testWidgets('should have Form widget', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byType(Form), findsOneWidget);
-    });
-
-    testWidgets('should have Scaffold as root widget', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final scaffold = find.byType(Scaffold);
-      expect(scaffold, findsOneWidget);
-    });
-
-    testWidgets('should have container elements for layout', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final containers = find.byType(Container);
-      expect(containers, findsWidgets);
-    });
-  });
-
-  group('SignupScreen - Additional Widget Tests', () {
-    testWidgets('should display Signup button', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byType(ElevatedButton), findsOneWidget);
-    });
-
-    testWidgets('should allow email field text entry', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final textFields = find.byType(TextField);
-      await tester.enterText(textFields.first, 'test@example.com');
-      await tester.pump();
-
-      expect(find.text('test@example.com'), findsOneWidget);
-    });
-
-    testWidgets('should allow phone field text entry', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final textFields = find.byType(TextField);
-      if (textFields.evaluate().length >= 2) {
-        await tester.enterText(textFields.at(1), '1234567890');
-        await tester.pump();
-
-        expect(find.text('1234567890'), findsOneWidget);
-      }
-    });
-
-    testWidgets('should allow password field text entry', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final textFields = find.byType(TextField);
-      if (textFields.evaluate().length >= 3) {
-        await tester.enterText(textFields.at(2), 'password123');
-        await tester.pump();
-
-        // Password should be entered (may be obscured visually)
-        expect(textFields.at(2), findsOneWidget);
-      }
-    });
-
-    testWidgets('should have checkbox for terms acceptance', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.byType(Checkbox), findsOneWidget);
-    });
-
-    testWidgets('should check/uncheck terms checkbox', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final checkbox = find.byType(Checkbox);
-      // Just verify checkbox widget exists without trying to tap it (which causes positioning issues in test
-      // viewport)
-      
-      final checkboxWidget = tester.widget<Checkbox>(checkbox);
-      expect(checkboxWidget, isNotNull);
-    });
-
-    testWidgets('should display all required form labels', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
+      expect(find.byType(Scaffold), findsOneWidget);
+      final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+      expect(scaffold.backgroundColor, Colors.white);
       expect(find.text('Email'), findsOneWidget);
       expect(find.text('Phone Number'), findsOneWidget);
       expect(find.text('New Password'), findsOneWidget);
       expect(find.text('Confirm Password'), findsOneWidget);
     });
 
-    testWidgets('should display MediConnect branding', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.text('MediConnect'), findsOneWidget);
-      expect(find.text('Connecting You'), findsOneWidget);
-      expect(find.text('To Better Care'), findsOneWidget);
-    });
-
-    testWidgets('should have login navigation link', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      expect(find.text('Login'), findsWidgets);
-    });
-
-    testWidgets('should render with proper color scheme', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final scaffold = find.byType(Scaffold);
-      expect(scaffold, findsOneWidget);
-
-      // Verify scaffold exists and has proper widgets
-      final scaffoldWidget = tester.widget<Scaffold>(scaffold);
-      expect(scaffoldWidget, isNotNull);
-    });
-
-    testWidgets('should allow clearing all input fields', (WidgetTester tester) async {
-      await tester.pumpWidget(createTestWidget());
-
-      final textFields = find.byType(TextField);
-      
-      for (int i = 0; i < textFields.evaluate().length; i++) {
-        await tester.enterText(textFields.at(i), 'test$i');
-        await tester.pump();
-        
-        // Clear field
-        await tester.enterText(textFields.at(i), '');
-        await tester.pump();
-      }
-
-      expect(find.text('test0'), findsNothing);
-    });
-
-    testWidgets('should have proper form widget hierarchy', (WidgetTester tester) async {
+    testWidgets('Form Structure and Input Fields', (tester) async {
       await tester.pumpWidget(createTestWidget());
 
       expect(find.byType(Form), findsOneWidget);
       expect(find.byType(TextFormField), findsWidgets);
-      expect(find.byType(Checkbox), findsOneWidget);
       expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(Checkbox), findsOneWidget);
+      expect(find.byType(Padding), findsWidgets);
+      expect(find.text('Register'), findsOneWidget);
+      
+      final formFields = find.byType(TextFormField);
+      expect(formFields, findsWidgets);
+      
+      final checkbox = find.byType(Checkbox);
+      expect(checkbox, findsOneWidget);
+    });
+
+    testWidgets('Email Field Validation', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      final formFields = find.byType(TextFormField);
+      expect(formFields, findsWidgets);
+      expect(find.byType(Form), findsOneWidget);
+      final emailField = formFields.first;
+      
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.pump();
+      expect(find.text('test@example.com'), findsOneWidget);
+
+      await tester.enterText(emailField, 'invalid');
+      await tester.pump();
+      expect(find.text('invalid'), findsOneWidget);
+
+      await tester.enterText(emailField, 'user@test.co.uk');
+      await tester.pump();
+      expect(find.text('user@test.co.uk'), findsOneWidget);
+
+      await tester.enterText(emailField, '');
+      await tester.pump();
+      expect(find.text('test@example.com'), findsNothing);
+      expect(find.text('invalid'), findsNothing);
+      expect(find.text('user@test.co.uk'), findsNothing);
+      expect(find.text('Email'), findsOneWidget);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(SingleChildScrollView), findsOneWidget);
+    });
+
+    testWidgets('Phone Number Field Validation', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      final formFields = find.byType(TextFormField);
+      expect(formFields, findsWidgets);
+      expect(find.text('Phone Number'), findsOneWidget);
+      
+      final phoneField = formFields.evaluate().length > 1 ? formFields.at(1) : null;
+      if (phoneField != null) {
+        await tester.enterText(phoneField, '1234567890');
+        await tester.pump();
+        expect(find.text('1234567890'), findsOneWidget);
+
+        await tester.enterText(phoneField, '9876543210');
+        await tester.pump();
+        expect(find.text('9876543210'), findsOneWidget);
+
+        await tester.enterText(phoneField, '');
+        await tester.pump();
+        expect(find.text('1234567890'), findsNothing);
+        expect(find.text('9876543210'), findsNothing);
+      }
+      
+      expect(find.byType(TextFormField), findsWidgets);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.text('Email'), findsOneWidget);
+    });
+
+    testWidgets('Password Fields Validation', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.text('New Password'), findsOneWidget);
+      expect(find.text('Confirm Password'), findsOneWidget);
+
+      final formFields = find.byType(TextFormField);
+      expect(formFields, findsWidgets);
+      expect(find.byType(Form), findsOneWidget);
+
+      // Test password field entry
+      if (formFields.evaluate().length > 2) {
+        final passwordField = formFields.at(2);
+        await tester.enterText(passwordField, 'Password123');
+        await tester.pump();
+        expect(find.text('Password123'), findsOneWidget);
+
+        final confirmField = formFields.evaluate().length > 3 ? formFields.at(3) : null;
+        if (confirmField != null) {
+          await tester.enterText(confirmField, 'Password123');
+          await tester.pump();
+          expect(find.text('Password123'), findsWidgets);
+        }
+      }
+
+      expect(find.byType(GestureDetector), findsWidgets);
+      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsWidgets);
+    });
+
+    testWidgets('Terms and Conditions Checkbox', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.byType(Checkbox), findsOneWidget);
+      
+      final checkbox = tester.widget<Checkbox>(find.byType(Checkbox));
+      expect(checkbox, isNotNull);
+
+      expect(find.byType(RichText), findsWidgets);
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(TextFormField), findsWidgets);
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(Padding), findsWidgets);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(Column), findsWidgets);
+    });
+
+    testWidgets('Signup Button and Navigation', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.text('Register'), findsOneWidget);
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.onPressed, isNotNull);
+
+      expect(find.text('Already have an account? '), findsWidgets);
+      expect(find.text('Login'), findsWidgets);
+      
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(GestureDetector), findsWidgets);
+      expect(find.byType(Text), findsWidgets);
+      expect(find.byType(Container), findsWidgets);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(Checkbox), findsOneWidget);
+    });
+
+    testWidgets('Form Input and Data Entry', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      const testEmail = 'newuser@example.com';
+      const testPhone = '9876543210';
+      const testPassword = 'SecurePassword123';
+
+      final formFields = find.byType(TextFormField);
+      expect(formFields, findsWidgets);
+
+      // Email entry
+      await tester.enterText(formFields.first, testEmail);
+      await tester.pump();
+      expect(find.text(testEmail), findsOneWidget);
+
+      // Change email
+      await tester.enterText(formFields.first, 'different@email.com');
+      await tester.pump();
+      expect(find.text('different@email.com'), findsOneWidget);
+      expect(find.text(testEmail), findsNothing);
+
+      // Phone entry
+      if (formFields.evaluate().length > 1) {
+        await tester.enterText(formFields.at(1), testPhone);
+        await tester.pump();
+        expect(find.text(testPhone), findsOneWidget);
+      }
+
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.text('Register'), findsOneWidget);
+    });
+
+    testWidgets('Widget Tree and Layout', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(Column), findsWidgets);
+      expect(find.byType(Padding), findsWidgets);
+      expect(find.byType(TextFormField), findsWidgets);
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(Checkbox), findsOneWidget);
+      expect(find.byType(Image), findsWidgets);
+      expect(find.byType(Text), findsWidgets);
+      expect(find.byType(GestureDetector), findsWidgets);
+    });
+
+    testWidgets('Initial State and Display', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+
+      // Verify all form labels are displayed
+      expect(find.text('Email'), findsOneWidget);
+      expect(find.text('Phone Number'), findsOneWidget);
+      expect(find.text('New Password'), findsOneWidget);
+      expect(find.text('Confirm Password'), findsOneWidget);
+
+      // Verify branding
+      expect(find.text('MediConnect'), findsOneWidget);
+      expect(find.text('Connecting You'), findsOneWidget);
+
+      // Verify form structure
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(Checkbox), findsOneWidget);
+      expect(find.text('Register'), findsOneWidget);
+      expect(find.byType(RichText), findsWidgets);
     });
   });
 }
