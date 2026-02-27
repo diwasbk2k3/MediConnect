@@ -112,4 +112,18 @@ class AuthRemoteDataSource implements IAuthRemoteDatasource {
     
     return response.data["message"];
   }
+
+  @override
+  Future<String> sendPasswordResetEmail(String email) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.sendPasswordResetEmail,
+      data: {"email": email},
+    );
+
+    if (response.data["success"] == true) {
+      return response.data["message"] ?? "Password reset email sent successfully";
+    }
+
+    throw Exception(response.data["message"] ?? "Failed to send reset email");
+  }
 }
