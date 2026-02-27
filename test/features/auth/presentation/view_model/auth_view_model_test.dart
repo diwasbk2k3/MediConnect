@@ -471,4 +471,87 @@ void main() {
       expect(newState.status, AuthStatus.initial);
     });
   });
+
+  group('AuthViewModel - Edge Cases', () {
+    test('should handle multiple login attempts with failures', () async {
+      // Arrange
+      const failure1 = ApiFailure(message: 'Invalid credentials');
+      const failure2 = ApiFailure(message: 'Invalid credentials');
+      
+      var callCount = 0;
+      when(() => mockLoginUsecase(any())).thenAnswer((_) async {
+        callCount++;
+        if (callCount == 1) {
+          return const Left(failure1);
+        } else {
+          return const Left(failure2);
+        }
+      });
+
+      final viewModel = container.read(authViewModelProvider.notifier);
+
+      // Act - First login attempt
+      await viewModel.login(email: 'test@example.com', password: 'wrong');
+      final state1 = container.read(authViewModelProvider);
+
+      // Second login attempt
+      await viewModel.login(email: 'test@example.com', password: 'wrong');
+      final state2 = container.read(authViewModelProvider);
+
+      // Assert
+      expect(state1.status, AuthStatus.error);
+      expect(state2.status, AuthStatus.error);
+      verify(() => mockLoginUsecase(any())).called(2);
+    });
+
+    test('should handle rapid register and login calls', () async {
+      // Arrange
+      when(() => mockRegisterUsecase(any()))
+          .thenAnswer((_) async => const Right(tUser));
+      when(() => mockLoginUsecase(any()))
+          .thenAnswer((_) async => const Right(tUser));
+
+      final viewModel = container.read(authViewModelProvider.notifier);
+
+      // Act
+      await viewModel.register(
+        email: 'test@example.com',
+        password: 'password123',
+        confirmPassword: 'password123',
+        termsAgreed: true,
+      );
+
+      final registeredState = container.read(authViewModelProvider);
+
+      await viewModel.login(email: 'test@example.com', password: 'password123');
+      final loginState = container.read(authViewModelProvider);
+
+      // Assert
+      expect(registeredState.status, AuthStatus.registered);
+      expect(loginState.status, AuthStatus.authenticated);
+      expect(loginState.authEntity, tUser);
+    });
+
+    test('should properly reset state on logout', () async {
+      // Arrange
+      when(() => mockLoginUsecase(any()))
+          .thenAnswer((_) async => const Right(tUser));
+
+      final viewModel = container.read(authViewModelProvider.notifier);
+
+      // Act - Login
+      await viewModel.login(email: 'test@example.com', password: 'password123');
+      var currentState = container.read(authViewModelProvider);
+      expect(currentState.status, AuthStatus.authenticated);
+
+      // Simulate logout by resetting state
+      viewModel.state = const AuthState(status: AuthStatus.initial);
+      currentState = container.read(authViewModelProvider);
+
+      // Assert
+      expect(currentState.status, AuthStatus.initial);
+      expect(currentState.authEntity, isNull);
+      expect(currentState.errorMessage, isNull);
+    });
+  });
 }
