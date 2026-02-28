@@ -302,7 +302,7 @@ class ReportCardWidget extends StatelessWidget {
               ),
               // Action Button
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -312,7 +312,7 @@ class ReportCardWidget extends StatelessWidget {
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
-                        vertical: 12,
+                        vertical: 11,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -336,7 +336,7 @@ class ReportCardWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
-                  vertical: 12,
+                  vertical: 10,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade50,

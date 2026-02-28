@@ -1,10 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mediconnect/core/api/api_endpoints.dart';
+import 'package:mediconnect/core/services/storage/user_session_service.dart';
+import 'package:mediconnect/features/auth/presentation/pages/login_screen.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+// Global navigator key for 401 navigation
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 // Provider for ApiClient
 final apiClientProvider = Provider<ApiClient>((ref) {
@@ -201,13 +207,41 @@ class _AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     // Handle 401 Unauthorized - token expired
     if (err.response?.statusCode == 401) {
-      // Clear token and redirect to login
-      _storage.delete(key: _tokenKey);
-      // You can add navigation logic here or use a callback
+      // Clear token from secure storage
+      await _storage.delete(key: _tokenKey);
+      
+      // Clear session data
+      try {
+        // Get the context to access ProviderScope if needed
+        final context = navigatorKey.currentContext;
+        if (context != null) {
+          // Read the user session service from ProviderScope
+          final userSessionService = ProviderScope.containerOf(context).read(userSessionServiceProvider);
+          await userSessionService.clearUserSession();
+        }
+      } catch (e) {
+        debugPrint('Error clearing user session: $e');
+      }
+
+      // Navigate to login screen
+      _navigateToLogin();
     }
     handler.next(err);
+  }
+
+  void _navigateToLogin() {
+    final context = navigatorKey.currentContext;
+    if (context != null && context.mounted) {
+      debugPrint('Navigating to login screen due to token expiration (401)');
+      
+      // Pop all routes and navigate to login
+      Navigator.of(context).popUntil((route) => false);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
   }
 }

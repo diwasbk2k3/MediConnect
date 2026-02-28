@@ -54,6 +54,7 @@ dependencies:
   test_cov_console: ^0.2.2
   mocktail: ^1.0.4
   jwt_decoder: ^2.0.1
+  sensors_plus: ^6.1.1
 
 dev_dependencies:
   flutter_test:

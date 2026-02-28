@@ -190,4 +190,27 @@ class AuthRepository implements IAuthRepository {
       return Left(ApiFailure(message: "No Internet Connection"));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> sendPasswordResetEmail(String email) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final message =
+            await _authRemoteDataSource.sendPasswordResetEmail(email);
+        return Right(message);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data["message"] ??
+                "Failed to send reset email",
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (err) {
+        return Left(ApiFailure(message: err.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    }
+  }
 }

@@ -14,4 +14,5 @@ abstract interface class IAuthRemoteDatasource {
   Future<String> changePassword(String currentPassword, String newPassword, String confirmPassword);
   Future<void> logout();
   Future<String> deleteAccount(String password);
+  Future<String> sendPasswordResetEmail(String email);
 }

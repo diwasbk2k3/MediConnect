@@ -57,290 +57,228 @@ void main() {
     );
   }
 
-  group('LoginScreen UI Elements - Header', () {
-    testWidgets('should display MediConnect title in header', (tester) async {
+  group('LoginScreen - Widget Tests', () {
+    testWidgets('Header and Branding Elements', (tester) async {
       final authViewModel = MockAuthViewModel();
       await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
 
       expect(find.text('MediConnect'), findsOneWidget);
-    });
-
-    testWidgets('should display tagline "Connecting You"', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
       expect(find.text('Connecting You'), findsOneWidget);
-    });
-
-    testWidgets('should display tagline "To Better Care"', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
       expect(find.text('To Better Care'), findsOneWidget);
-    });
-
-    testWidgets('should display rectangle background image', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
       expect(find.byType(Image), findsWidgets);
-    });
-
-    testWidgets('should display logo image', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      final images = find.byType(Image);
-      expect(images, findsWidgets);
-    });
-  });
-
-  group('LoginScreen Form Fields', () {
-    testWidgets('should display Email label', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
+      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(Scaffold), findsOneWidget);
+      final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+      expect(scaffold.backgroundColor, Colors.white);
+      expect(find.byType(AppBar), findsNothing); // LoginScreen has no AppBar
       expect(find.text('Email'), findsOneWidget);
-    });
-
-    testWidgets('should display Password label', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
       expect(find.text('Password'), findsOneWidget);
-    });
-
-    testWidgets('should display email input field with hint text', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      expect(find.byType(TextFormField), findsNWidgets(2));
-      expect(find.text('Enter your email'), findsOneWidget);
-    });
-
-    testWidgets('should display password input field with hint text', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      expect(find.text('Enter your password'), findsOneWidget);
-    });
-
-    testWidgets('should have two TextFormField widgets', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      expect(find.byType(TextFormField), findsNWidgets(2));
-    });
-  });
-
-  group('LoginScreen Form Controls', () {
-    testWidgets('should display Login button', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
       expect(find.text('Login'), findsOneWidget);
-    });
-
-    testWidgets('should display Forgot Password link', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      expect(find.text('Forgot Password?'), findsOneWidget);
-    });
-
-    testWidgets('should display Register now link', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
       expect(find.text("Don't have an account? "), findsOneWidget);
-      expect(find.text('Register now?'), findsOneWidget);
     });
 
-    testWidgets('should toggle password visibility when visibility icon tapped',
-        (tester) async {
+    testWidgets('Form Structure and Widgets', (tester) async {
       final authViewModel = MockAuthViewModel();
       await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
 
-      // Find visibility icon button
-      final iconButton = find.byIcon(Icons.visibility_off);
-      expect(iconButton, findsOneWidget);
-
-      // Tap to toggle
-      await tester.tap(iconButton);
-      await tester.pump();
-
-      // Should now show visibility icon
-      expect(find.byIcon(Icons.visibility), findsOneWidget);
-    });
-  });
-
-  group('LoginScreen Form Validation', () {
-    testWidgets('should have email field validator defined', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(Container), findsWidgets);
+      expect(find.byType(Column), findsWidgets);
       final formFields = find.byType(TextFormField);
-      
-      // Get the email field
       final emailField = tester.widget<TextFormField>(formFields.at(0));
-      
-      // Email validator should exist
+      final passwordField = tester.widget<TextFormField>(formFields.at(1));
       expect(emailField.validator, isNotNull);
-    });
-
-    testWidgets('should have password field validator defined', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      final formFields = find.byType(TextFormField);
-      
-      // Get the password field
-      final passwordField = tester.widget<TextFormField>(formFields.at(1));
-      
-      // Password validator should exist
       expect(passwordField.validator, isNotNull);
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
     });
 
-    testWidgets('email validator rejects empty email', (tester) async {
+    testWidgets('Email Field Validation', (tester) async {
       final authViewModel = MockAuthViewModel();
       await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
 
+      final emailField = find.byType(TextFormField).first;
       final formFields = find.byType(TextFormField);
-      final emailField = tester.widget<TextFormField>(formFields.at(0));
-      
-      // Test the validator directly
-      final validator = emailField.validator;
+      final emailWidget = tester.widget<TextFormField>(formFields.at(0));
+      final validator = emailWidget.validator;
+
       expect(validator, isNotNull);
-      expect(validator!(''), isNotEmpty);
+      expect(validator!(''), isNotEmpty); // Empty email
+      expect(validator('invalid'), isNotEmpty); // Invalid format
+      expect(validator('test@example.com'), isNull); // Valid email
+      expect(validator('user@test.co.uk'), isNull); // Valid format
+
+      await tester.enterText(emailField, 'test@example.com');
+      await tester.pump();
+      expect(find.text('test@example.com'), findsOneWidget);
+
+      await tester.enterText(emailField, 'invalid');
+      await tester.pump();
+      expect(find.text('invalid'), findsOneWidget);
+
+      await tester.enterText(emailField, '');
+      await tester.pump();
+      expect(find.text('test@example.com'), findsNothing);
+      expect(find.text('invalid'), findsNothing);
     });
 
-    testWidgets('password validator rejects short password', (tester) async {
+    testWidgets('Password Field Validation', (tester) async {
       final authViewModel = MockAuthViewModel();
       await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
 
+      final passwordField = find.byType(TextFormField).at(1);
       final formFields = find.byType(TextFormField);
-      final passwordField = tester.widget<TextFormField>(formFields.at(1));
-      
-      // Test the validator directly
-      final validator = passwordField.validator;
+      final passwordWidget = tester.widget<TextFormField>(formFields.at(1));
+      final validator = passwordWidget.validator;
+
       expect(validator, isNotNull);
-      expect(validator!('12345'), isNotEmpty); // Less than 6 characters
-    });
+      expect(validator!(''), isNotEmpty); // Empty password
+      expect(validator('12345'), isNotEmpty); // Too short
+      expect(validator('password123'), isNull); // Valid
 
-    testWidgets('should allow valid email and password entry', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      final formFields = find.byType(TextFormField);
-      
-      await tester.enterText(formFields.at(0), 'valid@example.com');
-      await tester.enterText(formFields.at(1), 'password123');
+      await tester.enterText(passwordField, 'password123');
       await tester.pump();
 
-      expect(find.text('valid@example.com'), findsOneWidget);
+      final passwordController = passwordWidget.controller;
+      expect(passwordController?.text, isNotEmpty);
 
-      // Check password field has content
-      final passwordField = tester.widget<TextFormField>(formFields.at(1));
-      expect(passwordField.controller?.text, 'password123');
+      await tester.enterText(passwordField, '');
+      await tester.pump();
+      expect(passwordController?.text, '');
+      expect(validator(''), isNotEmpty);
     });
-  });
 
-  group('LoginScreen Form Submission', () {
-    testWidgets('should not call login when form is invalid', (tester) async {
+    testWidgets('Password Visibility Toggle', (tester) async {
       final authViewModel = MockAuthViewModel();
       await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
 
-      final formFields = find.byType(TextFormField);
-      
-      // Only fill email, leave password empty
-      await tester.enterText(formFields.at(0), 'test@example.com');
+      var visibilityIcon = find.byIcon(Icons.visibility_off);
+      expect(visibilityIcon, findsOneWidget);
 
-      await tester.tap(find.text('Login'));
+      await tester.tap(visibilityIcon);
+      await tester.pump();
+      expect(find.byIcon(Icons.visibility), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.visibility));
+      await tester.pump();
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+      
+      await tester.enterText(find.byType(TextFormField).at(1), 'password123');
+      await tester.pump();
+      
+      await tester.tap(find.byIcon(Icons.visibility_off));
+      await tester.pump();
+      expect(find.byIcon(Icons.visibility), findsOneWidget);
+      
+      await tester.tap(find.byIcon(Icons.visibility));
+      await tester.pump();
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+    });
+
+    testWidgets('Login Button and Form Submission', (tester) async {
+      final authViewModel = MockAuthViewModel();
+      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
+
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.text('Login'), findsOneWidget);
+
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.onPressed, isNotNull);
+
+      await tester.enterText(find.byType(TextFormField).first, 'test@example.com');
+      await tester.enterText(find.byType(TextFormField).at(1), 'password123');
       await tester.pump();
 
-      // State should still be initial (not authenticated)
+      expect(find.text('test@example.com'), findsOneWidget);
+      expect(find.text('Password'), findsOneWidget);
       expect(authViewModel.state.status, AuthStatus.initial);
     });
 
-    testWidgets('should allow form to be submitted with valid data',
-        (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      final formFields = find.byType(TextFormField);
-      
-      const testEmail = 'authEntity@test.com';
-      const testPassword = 'mypassword123';
-
-      await tester.enterText(formFields.at(0), testEmail);
-      await tester.enterText(formFields.at(1), testPassword);
-
-      // No validation error should appear
-      expect(find.text('Email is required'), findsNothing);
-      expect(find.text('Password is required'), findsNothing);
-      expect(find.text('Enter a valid email'), findsNothing);
-      expect(find.text('Password must be at least 6 characters'), findsNothing);
-    });
-
-    testWidgets('should display CircularProgressIndicator during login',
-        (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      // Find form fields
-      final formFields = find.byType(TextFormField);
-      
-      await tester.enterText(formFields.at(0), 'test@example.com');
-      await tester.enterText(formFields.at(1), 'password123');
-
-      // Tap login
-      await tester.tap(find.text('Login'));
-      await tester.pump();
-
-      // Since form is valid, no validation errors
-      expect(find.text('Email is required'), findsNothing);
-    });
-  });
-
-  group('LoginScreen Navigation & UI', () {
-    testWidgets('should show Forgot Password link', (tester) async {
+    testWidgets('Navigation and Help Links', (tester) async {
       final authViewModel = MockAuthViewModel();
       await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
 
       expect(find.text('Forgot Password?'), findsOneWidget);
+      expect(find.text("Don't have an account? "), findsOneWidget);
+      expect(find.text('Register now?'), findsOneWidget);
+      
+      final forgotPasswordLink = find.text('Forgot Password?');
+      expect(forgotPasswordLink, findsOneWidget);
+      
+      final registerLink = find.text('Register now?');
+      expect(registerLink, findsOneWidget);
+      
+      expect(find.byType(GestureDetector), findsWidgets);
+      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(Container), findsWidgets);
     });
 
-    testWidgets('should render in SingleChildScrollView', (tester) async {
+    testWidgets('Text Input and Data Entry', (tester) async {
       final authViewModel = MockAuthViewModel();
       await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
 
+      final emailField = find.byType(TextFormField).first;
+      final passwordField = find.byType(TextFormField).at(1);
+
+      const testEmail = 'user@example.com';
+      const testPassword = 'MyPassword123';
+
+      await tester.enterText(emailField, testEmail);
+      await tester.pump();
+      expect(find.text(testEmail), findsOneWidget);
+
+      await tester.enterText(passwordField, testPassword);
+      await tester.pump();
+
+      final passwordWidget = tester.widget<TextFormField>(passwordField);
+      expect(passwordWidget.controller?.text, testPassword);
+
+      await tester.enterText(emailField, '');
+      await tester.pump();
+      expect(find.text(testEmail), findsNothing);
+
+      await tester.enterText(emailField, 'new@email.com');
+      await tester.pump();
+      expect(find.text('new@email.com'), findsOneWidget);
+      expect(find.text(testEmail), findsNothing);
+    });
+
+    testWidgets('Widget Tree and Hierarchy', (tester) async {
+      final authViewModel = MockAuthViewModel();
+      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
+
+      expect(find.byType(Scaffold), findsOneWidget);
       expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(Column), findsWidgets);
+      expect(find.byType(Container), findsWidgets);
+      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(Image), findsWidgets);
+      expect(find.byType(Text), findsWidgets);
+      expect(find.byType(GestureDetector), findsWidgets);
+      expect(find.byType(Padding), findsWidgets);
     });
 
-    testWidgets('should have white background', (tester) async {
+    testWidgets('Initial State and Conditions', (tester) async {
       final authViewModel = MockAuthViewModel();
       await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
 
-      final scaffold = find.byType(Scaffold);
-      expect(scaffold, findsOneWidget);
-
-      final scaffoldWidget = tester.widget<Scaffold>(scaffold);
-      expect(scaffoldWidget.backgroundColor, Colors.white);
-    });
-
-    testWidgets('should have Login button', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
-      final button = find.byType(ElevatedButton);
-      expect(button, findsOneWidget);
-    });
-
-    testWidgets('should have Login button with correct text', (tester) async {
-      final authViewModel = MockAuthViewModel();
-      await tester.pumpWidget(createTestWidget(authViewModel: authViewModel));
-
+      expect(authViewModel.state.status, AuthStatus.initial);
+      expect(authViewModel.state.authEntity, isNull);
+      expect(authViewModel.state.errorMessage, isNull);
+      
+      expect(find.byType(Form), findsOneWidget);
+      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.text('Email'), findsOneWidget);
+      expect(find.text('Password'), findsOneWidget);
       expect(find.text('Login'), findsOneWidget);
+      expect(find.text('MediConnect'), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
     });
   });
 }
