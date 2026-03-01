@@ -10,7 +10,6 @@ AppointmentApiModel _$AppointmentApiModelFromJson(Map<String, dynamic> json) =>
     AppointmentApiModel(
       appointmentId: json['_id'] as String?,
       patientId: json['patientId'] as String?,
-      hospitalId: _hospitalIdConverter(json['hospitalId']),
       department: json['department'] as String?,
       appointmentType: json['appointmentType'] as String?,
       appointmentDate: json['appointmentDate'] as String?,
@@ -39,7 +38,6 @@ Map<String, dynamic> _$AppointmentApiModelToJson(AppointmentApiModel instance) {
 
   writeNotNull('_id', instance.appointmentId);
   writeNotNull('patientId', instance.patientId);
-  writeNotNull('hospitalId', instance.hospitalId);
   writeNotNull('department', instance.department);
   writeNotNull('appointmentType', instance.appointmentType);
   writeNotNull('appointmentDate', instance.appointmentDate);

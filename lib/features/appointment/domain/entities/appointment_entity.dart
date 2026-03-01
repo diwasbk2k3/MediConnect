@@ -63,6 +63,9 @@ class AppointmentEntity extends Equatable {
     );
   }
 
+  // Convert to cache model for offline storage
+  // Note: Uses AppointmentCacheModel.fromEntity() to avoid circular imports
+
   @override
   List<Object?> get props => [
     appointmentId,

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/core/error/failures.dart';
 import 'package:mediconnect/core/services/connectivity/network_info.dart';
+import 'package:mediconnect/core/services/cache/cache_service.dart';
 import 'package:mediconnect/features/appointment/data/datasources/remote/appointment_remote_datasource.dart';
 import 'package:mediconnect/features/appointment/domain/entities/appointment_entity.dart';
 import 'package:mediconnect/features/appointment/domain/repositories/appointment_repository.dart';
@@ -11,21 +12,26 @@ import 'package:mediconnect/features/appointment/domain/repositories/appointment
 final remoteAppointmentRepositoryProvider = Provider<IAppointmentRepository>((ref) {
   final networkInfo = ref.read(networkInfoProvider);
   final appointmentRemoteDatasource = ref.read(appointmentRemoteDatasourceProvider);
+  final cacheService = ref.read(cacheServiceProvider);
   return RemoteAppointmentRepository(
     networkInfo: networkInfo,
     appointmentRemoteDatasource: appointmentRemoteDatasource,
+    cacheService: cacheService,
   );
 });
 
 class RemoteAppointmentRepository implements IAppointmentRepository {
   final NetworkInfo _networkInfo;
   final AppointmentRemoteDatasource _appointmentRemoteDatasource;
+  final CacheService _cacheService;
 
   RemoteAppointmentRepository({
     required NetworkInfo networkInfo,
     required AppointmentRemoteDatasource appointmentRemoteDatasource,
+    required CacheService cacheService,
   })  : _networkInfo = networkInfo,
-        _appointmentRemoteDatasource = appointmentRemoteDatasource;
+        _appointmentRemoteDatasource = appointmentRemoteDatasource,
+        _cacheService = cacheService;
 
   @override
   Future<Either<Failure, AppointmentEntity>> bookAppointment({
@@ -46,7 +52,12 @@ class RemoteAppointmentRepository implements IAppointmentRepository {
           appointmentTime: appointmentTime,
           paymentAmount: paymentAmount,
         );
-        return Right(appointment.toEntity());
+        final entity = appointment.toEntity();
+        
+        // Cache the successful booking
+        await _cacheService.cacheAppointment(entity);
+        
+        return Right(entity);
       } on DioException catch (err) {
         return Left(
           ApiFailure(
