@@ -118,12 +118,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   Positioned(
-                    left: 5,
-                    bottom: 30,
+                    left: 20,
+                    bottom: 50,
                     child: Image.asset(
                       'assets/icons/logo.png',
-                      width: 140,
-                      height: 140,
+                      width: 100,
+                      height: 100,
                       fit: BoxFit.contain,
                     ),
                   ),
