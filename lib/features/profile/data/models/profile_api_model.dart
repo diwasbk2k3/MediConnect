@@ -12,6 +12,7 @@ class ProfileApiModel {
   final String? gender;
   final int? age;
   final String? medicalHistory;
+  final String? profileImageUrl;
 
   ProfileApiModel({
     this.name,
@@ -20,6 +21,7 @@ class ProfileApiModel {
     this.gender,
     this.age,
     this.medicalHistory,
+    this.profileImageUrl,
   });
 
   // From Json
@@ -38,6 +40,7 @@ class ProfileApiModel {
       gender: entity.gender,
       age: entity.age,
       medicalHistory: entity.medicalHistory,
+      profileImageUrl: entity.profileImageUrl,
     );
   }
 
@@ -50,6 +53,7 @@ class ProfileApiModel {
       gender: gender,
       age: age,
       medicalHistory: medicalHistory,
+      profileImageUrl: profileImageUrl,
     );
   }
 }

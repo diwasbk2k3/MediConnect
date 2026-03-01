@@ -14,6 +14,7 @@ ProfileApiModel _$ProfileApiModelFromJson(Map<String, dynamic> json) =>
       gender: json['gender'] as String?,
       age: (json['age'] as num?)?.toInt(),
       medicalHistory: json['medicalHistory'] as String?,
+      profileImageUrl: json['profileImageUrl'] as String?,
     );
 
 Map<String, dynamic> _$ProfileApiModelToJson(ProfileApiModel instance) {
@@ -31,5 +32,6 @@ Map<String, dynamic> _$ProfileApiModelToJson(ProfileApiModel instance) {
   writeNotNull('gender', instance.gender);
   writeNotNull('age', instance.age);
   writeNotNull('medicalHistory', instance.medicalHistory);
+  writeNotNull('profileImageUrl', instance.profileImageUrl);
   return val;
 }

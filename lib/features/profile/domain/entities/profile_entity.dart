@@ -8,6 +8,7 @@ class ProfileEntity extends Equatable {
   final String? gender;
   final int? age;
   final String? medicalHistory;
+  final String? profileImageUrl;
 
   const ProfileEntity({
     this.patientId,
@@ -16,7 +17,8 @@ class ProfileEntity extends Equatable {
     this.phoneNumber,
     this.gender,
     this.age,
-    this.medicalHistory
+    this.medicalHistory,
+    this.profileImageUrl,
   });
 
   ProfileEntity copyWith({
@@ -27,6 +29,7 @@ class ProfileEntity extends Equatable {
     String? gender,
     int? age,
     String? medicalHistory,
+    String? profileImageUrl,
   }) {
     return ProfileEntity(
       patientId: patientId ?? this.patientId,
@@ -36,6 +39,7 @@ class ProfileEntity extends Equatable {
       gender: gender ?? this.gender,
       age: age ?? this.age,
       medicalHistory: medicalHistory ?? this.medicalHistory,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
     );
   }
 
@@ -48,5 +52,6 @@ class ProfileEntity extends Equatable {
     gender,
     age,
     medicalHistory,
+    profileImageUrl,
   ];
 }
