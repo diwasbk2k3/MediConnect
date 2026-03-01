@@ -180,6 +180,27 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
     );
   }
 
+  /// Helper method to build appropriate ImageProvider for profile image
+  /// Handles both local cached files and remote network images
+  ImageProvider<Object> _buildImageProvider(String imageUrl) {
+    // Check if it's a local file path
+    if (imageUrl.startsWith('/') || imageUrl.contains('profile_images')) {
+      final file = File(imageUrl);
+      if (file.existsSync()) {
+        return FileImage(file);
+      }
+    }
+
+    // Check if it's already a complete network URL
+    if (imageUrl.startsWith('http')) {
+      return NetworkImage(imageUrl);
+    }
+
+    // For relative paths, construct the full URL (keep /api in the path)
+    String fullUrl = '${ApiEndpoints.baseUrl}/$imageUrl';
+    return NetworkImage(fullUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -333,10 +354,8 @@ class _ProfileScreenUIState extends ConsumerState<ProfileScreenUI> {
                         ? FileImage(File(_selectedMedia.first.path))
                               as ImageProvider
                         : profileState.profileImageUrl != null
-                        ? NetworkImage(
-                                '${ApiEndpoints.baseUrl}/${profileState.profileImageUrl}',
-                              )
-                              as ImageProvider
+                        ? _buildImageProvider(
+                            profileState.profileImageUrl!)
                         : const AssetImage("assets/images/profile.png"),
                   ),
                 ),
