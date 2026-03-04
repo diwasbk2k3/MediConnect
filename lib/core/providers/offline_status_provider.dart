@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:mediconnect/core/services/connectivity/network_info.dart';
 
 /// Provider that tracks the current offline status

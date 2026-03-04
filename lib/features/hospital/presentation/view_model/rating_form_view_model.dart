@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mediconnect/features/hospital/domain/usecases/give_rating_usecase.dart';
 import 'package:mediconnect/features/hospital/presentation/state/rating_form_state.dart';
 
