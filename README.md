@@ -20,7 +20,16 @@ MediConnect follows **Clean Architecture** principles with:
 - 🤖 **AI Assistant** - Intelligent health assistant for guidance and support
 - 📊 **Dashboard** - Personalized health dashboard with key information
 - 🎯 **Smart Onboarding** - Guided setup for new users
+- 📶 **Offline Mode** - Access essential app features and saved data without an internet connection
 - 📱 **Sensors Integration** - Support for device sensors to gather health metrics
+
+### **Sensor Features**
+
+- **Accelerometer (Shake Logout)**
+   MediConnect uses the device accelerometer to detect shake gestures. When the phone is shaken three times quickly, the app automatically logs out the user for quick and secure access protection.
+
+- **Proximity Sensor (Near-Face Warning)**
+   MediConnect uses the proximity sensor to detect when the phone is very close to the user’s face. When near-face is detected, the app shows a warning asking the user to keep a safe distance.
   
 ## **Tech Stack**
 
@@ -56,32 +65,6 @@ MediConnect follows **Clean Architecture** principles with:
 - **UUID** (^4.5.2) - Generate unique identifiers
 - **Path Provider** (^2.1.5) - File system paths
 
-## **Project Structure**
-
-```
-lib/
-├── main.dart              # App entry point
-├── app/                   # App-level configuration
-├── features/              # Feature modules
-│   ├── auth/             # Authentication
-│   ├── appointment/      # Appointment management
-│   ├── dashboard/        # User dashboard
-│   ├── hospital/         # Hospital search & info
-│   ├── profile/          # User profile
-│   ├── report/           # Medical reports
-│   ├── assistant/        # AI assistant
-│   ├── sensors/          # Sensors integration
-│   ├── onboarding/       # Onboarding flow
-│   └── splash/           # Splash screen
-└── core/                  # Core functionality
-    ├── api/              # API client & configuration
-    ├── constants/        # App constants
-    ├── error/            # Error handling
-    ├── services/         # Core services
-    ├── usecase/          # Use cases / Business logic
-    ├── utils/            # Utility functions
-    └── widgets/          # Reusable widgets
-```
 
 ## **Getting Started**
 
