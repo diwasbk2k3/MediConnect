@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mediconnect/core/utils/snackbar_utils.dart';
 import '../state/sensor_providers.dart';
 
 class HiddenSensorListener extends ConsumerStatefulWidget {
@@ -19,6 +20,9 @@ class HiddenSensorListener extends ConsumerStatefulWidget {
 
 class _HiddenSensorListenerState extends ConsumerState<HiddenSensorListener> {
   bool _logoutDialogShown = false;
+  DateTime? _lastProximityWarningAt;
+
+  static const Duration _proximityToastCooldown = Duration(seconds: 6);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,27 @@ class _HiddenSensorListenerState extends ConsumerState<HiddenSensorListener> {
           _logoutDialogShown = true;
           _showLogoutDialog(context);
         }
+      });
+    });
+
+    // Listen to proximity sensor and warn when face/object is too close
+    ref.listen<AsyncValue<bool>>(proximityNearProvider, (previous, proximity) {
+      proximity.whenData((isNear) {
+        if (!isNear || !mounted) {
+          return;
+        }
+
+        final now = DateTime.now();
+        if (_lastProximityWarningAt != null &&
+            now.difference(_lastProximityWarningAt!) < _proximityToastCooldown) {
+          return;
+        }
+
+        _lastProximityWarningAt = now;
+        SnackbarUtils.showWarning(
+          context,
+          'Phone is too close to your face. Please keep a safe distance.',
+        );
       });
     });
 
